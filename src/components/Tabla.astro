@@ -1,0 +1,23 @@
+---
+interface Props {
+  numero: string;
+  titulo: string;
+  caption?: string;
+  fuente: string;
+  nota?: string;
+  id?: string;
+  izquierda?: boolean;
+}
+const { numero, titulo, caption, fuente, nota, id, izquierda = false } = Astro.props;
+---
+
+<section class="table-block" id={id} aria-labelledby={id ? `${id}-t` : undefined}>
+  <h3 id={id ? `${id}-t` : undefined}><span class="tnum">Tabla {numero}.</span> {titulo}</h3>
+  <div class="table-scroll" tabindex="0" role="region" aria-label={`Tabla ${numero}: ${titulo}`}>
+    <table class:list={['data', { left: izquierda }]}>
+      {caption && <caption class="visually-hidden">{caption}</caption>}
+      <slot />
+    </table>
+  </div>
+  <p class="source"><strong>Fuente:</strong> {fuente}{nota && <> <strong>Nota:</strong> {nota}</>}</p>
+</section>

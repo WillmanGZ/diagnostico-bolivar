@@ -1,0 +1,216 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Tabla from '../components/Tabla.astro';
+import Interpretacion from '../components/Interpretacion.astro';
+import MapaColombia from '../components/MapaColombia.astro';
+import MapaBolivar from '../components/MapaBolivar.astro';
+import Foto from '../components/Foto.astro';
+import Pager from '../components/Pager.astro';
+import { fotos } from '../data/fotos';
+---
+
+<BaseLayout
+  title="El departamento"
+  path="/departamento"
+  description="Presentación de Bolívar y Cartagena de Indias: ubicación, población, municipios, geografía, cultura, turismo e indicadores sociales comparados con Colombia."
+>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="kicker">1. Presentación general</p>
+      <h1>El departamento de Bolívar</h1>
+      <p class="lead">Un territorio de 25.978 km² que va de las playas de Cartagena a las serranías del sur, atravesado por el río Magdalena.</p>
+      <ul class="toc">
+        <li><a href="#ubicacion">Ubicación</a></li>
+        <li><a href="#tabla-1">Tabla 1</a></li>
+        <li><a href="#municipios">Municipios</a></li>
+        <li><a href="#geografia">Geografía y clima</a></li>
+        <li><a href="#cultura">Cultura y turismo</a></li>
+        <li><a href="#tabla-2">Tabla 2: indicadores sociales</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="section" id="ubicacion">
+    <div class="wrap split">
+      <div>
+        <h2>Ubicación geográfica</h2>
+        <p>Bolívar está en el norte de Colombia, en la región Caribe. Limita al norte con el mar Caribe y el departamento de Atlántico; al este con Magdalena, Cesar y Santander; al sur con Santander y Antioquia; y al occidente con Córdoba y Sucre. Su territorio combina una franja costera, llanuras inundables, los Montes de María y, hacia el sur, la serranía de San Lucas.</p>
+        <p>Su capital es <strong>Cartagena de Indias</strong>, distrito turístico y cultural que concentra cerca de la mitad de la población, el puerto, la industria y el turismo. Los otros 45 municipios se organizan en subregiones como el Dique, los Montes de María, la Depresión Momposina, Loba, la Mojana y el Magdalena Medio.</p>
+        <p>El departamento tiene <strong>46 municipios</strong>, con Cartagena como distrito. La mayoría de los municipios es pequeña y rural; la economía y los servicios se concentran en la capital y en Magangué, el principal puerto fluvial del río Magdalena en el departamento.</p>
+      </div>
+      <MapaColombia />
+    </div>
+  </section>
+
+  <section class="section alt" id="tabla-1-sec">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Caracterización general</h2>
+        <p>Cada dato lleva el año al que corresponde. Las poblaciones son proyecciones del DANE basadas en el Censo de 2018.</p>
+      </div>
+
+      <Tabla
+        id="tabla-1"
+        izquierda
+        numero="1"
+        titulo="Caracterización general del departamento y su capital"
+        caption="Ubicación, extensión, población, municipios, densidad y actividades económicas de Bolívar y de Cartagena de Indias"
+        fuente="UPRA, Documento regional Bolívar (proyecciones DANE-CNPV 2018, año 2023) para el departamento; Cartagena Cómo Vamos, Informe de Calidad de Vida 2025 (proyección DANE, año 2025) y POT de Cartagena (Decreto 0977 de 2001) para la capital."
+        nota="Los años difieren entre columnas: 2023 para el departamento, 2025 para Cartagena. La población rural y urbana de Cartagena es una estimación a partir de la proyección rural de 107.639 personas, que conviene verificar con el DANE. La densidad de Bolívar en 2025 sería de 86 hab./km² con la proyección de 2,24 millones."
+      >
+        <thead>
+          <tr>
+            <th scope="col">Indicador</th>
+            <th scope="col">Departamento de Bolívar</th>
+            <th scope="col">Capital: Cartagena de Indias</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Ubicación geográfica</th>
+            <td class="l">Norte de Colombia, región Caribe. Limita con el mar Caribe, Atlántico, Magdalena, Cesar, Santander, Antioquia, Córdoba y Sucre.</td>
+            <td class="l">Costa norte del departamento, sobre el mar Caribe y la bahía de Cartagena.</td>
+          </tr>
+          <tr><th scope="row">Extensión territorial (km²)</th><td>25.978</td><td>609,1 (con el área rural e insular)</td></tr>
+          <tr><th scope="row">Población total</th><td>2.247.283 (2023)</td><td>1.011.520 (2025)</td></tr>
+          <tr><th scope="row">Población urbana</th><td>1.644.271 (73,2 %, 2023)</td><td>≈903.900 (≈89,4 %, 2025)</td></tr>
+          <tr><th scope="row">Población rural</th><td>603.012 (26,8 %, 2023)</td><td>≈107.600 (≈10,6 %, 2025)</td></tr>
+          <tr><th scope="row">Número de municipios</th><td>46</td><td>Un distrito con 3 localidades urbanas y corregimientos rurales e insulares</td></tr>
+          <tr><th scope="row">Densidad poblacional (hab./km²)</th><td>86,5 (2023)</td><td>≈1.660 (2025)</td></tr>
+          <tr>
+            <th scope="row">Actividades económicas principales</th>
+            <td class="l">Comercio, transporte y turismo; administración pública, educación y salud; industria manufacturera; agricultura y ganadería; construcción.</td>
+            <td class="l">Puerto y logística, industria petroquímica y de refinación (Mamonal), turismo y hoteles, comercio, servicios públicos y administración.</td>
+          </tr>
+        </tbody>
+      </Tabla>
+
+      <Interpretacion>
+        <p>Bolívar es un departamento extenso y de densidad media (86 habitantes por kilómetro cuadrado), pero con una población muy desigualmente repartida: casi la mitad de sus habitantes vive en Cartagena, donde la densidad es cerca de veinte veces mayor. Tres de cada cuatro bolivarenses viven en cabeceras municipales, aunque el 26,8 % que habita en zonas rurales es una proporción alta frente al conjunto del país.</p>
+        <p>Esa estructura explica buena parte de los contrastes que se verán en el resto de la investigación: una capital con servicios, industria y turismo, y un resto del departamento con carencias de acueducto, alcantarillado y empleo formal.</p>
+      </Interpretacion>
+    </div>
+  </section>
+
+  <section class="section" id="municipios">
+    <div class="wrap split">
+      <div>
+        <h2>Principales municipios y centros poblados</h2>
+        <ul>
+          <li><strong>Cartagena de Indias</strong> (capital): puerto, industria, turismo y administración. Concentra cerca de 45 % de la población departamental.</li>
+          <li><strong>Magangué</strong>: puerto fluvial sobre el río Magdalena y centro comercial del sur y la Mojana.</li>
+          <li><strong>Turbaco, Arjona y Turbana</strong>: municipios del área de influencia de Cartagena, con crecimiento residencial y comercial.</li>
+          <li><strong>El Carmen de Bolívar, San Jacinto y San Juan Nepomuceno</strong>: núcleo de los Montes de María, con agricultura (tabaco, aguacate, ñame) y artesanías como las hamacas de San Jacinto.</li>
+          <li><strong>María la Baja</strong>: distrito de riego con arroz y palma de aceite.</li>
+          <li><strong>Santa Cruz de Mompox</strong>: centro histórico a orillas del Magdalena, Patrimonio de la Humanidad.</li>
+          <li><strong>San Basilio de Palenque</strong> (corregimiento de Mahates): primer pueblo libre de América y patrimonio cultural inmaterial.</li>
+          <li><strong>Simití, Santa Rosa del Sur y San Pablo</strong>: sur de Bolívar, con minería, ganadería y agricultura.</li>
+        </ul>
+        <div class="note"><p>El mapa muestra 45 de los 46 municipios: la geometría base no incluye Norosí.</p></div>
+      </div>
+      <MapaBolivar />
+    </div>
+  </section>
+
+  <section class="section alt" id="geografia">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Geografía, clima y recursos naturales</h2>
+      </div>
+      <div class="grid grid-3">
+        <div class="card">
+          <h3>Relieve y agua</h3>
+          <p>Predominan las llanuras del Caribe y la depresión momposina, cruzadas por el río Magdalena, el canal del Dique y un sistema de ciénagas. Al sur se levantan la serranía de San Lucas y, al norte, los Montes de María.</p>
+        </div>
+        <div class="card">
+          <h3>Clima</h3>
+          <p>Cálido y tropical. En Cartagena la temperatura media anual ronda los 27 a 28 °C, con máximas de 31 a 33 °C, humedad cercana al 90 % y dos temporadas de lluvia separadas por una época seca entre diciembre y abril.</p>
+        </div>
+        <div class="card">
+          <h3>Recursos naturales</h3>
+          <p>Suelos aptos para ganadería y agricultura, pesca marina y de ciénaga, oro en el sur, un litoral con bahías y archipiélagos y una gran biodiversidad, con áreas protegidas como el Parque Nacional Natural Corales del Rosario y de San Bernardo.</p>
+        </div>
+      </div>
+      <Foto foto={fotos.rioMagdalena} sizes="(min-width: 72rem) 70rem, 100vw" width={1600} class="wide-photo" />
+    </div>
+  </section>
+
+  <section class="section" id="cultura">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Aspectos culturales y turísticos</h2>
+        <p>Bolívar reúne dos de los bienes colombianos inscritos por la UNESCO, una tradición afrodescendiente única y una de las ofertas de turismo de playa y patrimonio más reconocidas de América Latina.</p>
+      </div>
+      <ul class="tags">
+        <li><span class="pill">Puerto, Fortificaciones y Conjunto Monumental de Cartagena · Patrimonio Mundial 1984</span></li>
+        <li><span class="pill">Centro histórico de Santa Cruz de Mompox · Patrimonio Mundial 1995</span></li>
+        <li><span class="pill">Espacio cultural de Palenque de San Basilio · Patrimonio inmaterial</span></li>
+      </ul>
+      <div class="gallery">
+        <Foto foto={fotos.murallas} sizes="(min-width: 72rem) 24rem, 100vw" width={900} />
+        <Foto foto={fotos.castillo} sizes="(min-width: 72rem) 24rem, 100vw" width={900} />
+        <Foto foto={fotos.playaBlanca} sizes="(min-width: 72rem) 24rem, 100vw" width={900} />
+        <Foto foto={fotos.mompoxRio} sizes="(min-width: 72rem) 24rem, 100vw" width={900} />
+        <Foto foto={fotos.mompoxIglesia} sizes="(min-width: 72rem) 24rem, 100vw" width={900} />
+        <Foto foto={fotos.palenque} sizes="(min-width: 72rem) 24rem, 100vw" width={900} />
+      </div>
+      <div class="grid grid-2 mt-2">
+        <div class="card">
+          <h3>Turismo</h3>
+          <p>Cartagena es el principal destino turístico del Caribe colombiano: centro amurallado, castillo de San Felipe de Barajas, playas y las islas del Rosario y Barú, además de ser sede de congresos y cruceros. Mompox atrae un turismo de patrimonio y de naturaleza a lo largo del río Magdalena.</p>
+        </div>
+        <div class="card">
+          <h3>Cultura y tradiciones</h3>
+          <p>Mezcla herencia indígena, española y africana. Entre sus expresiones están la música de tambores y la champeta, la lengua palenquera, las fiestas de Independencia de Cartagena en noviembre, el Festival de Jazz de Mompox, y una gastronomía de pescados, arroz con coco, cazuelas de mariscos y dulces tradicionales.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="tabla-2-sec">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Indicadores sociales frente a Colombia</h2>
+        <p>Los indicadores no son de un mismo año: cada fila indica el suyo, porque las fuentes se publican con calendarios distintos. No se mezclan periodos dentro de una misma fila.</p>
+      </div>
+
+      <Tabla
+        id="tabla-2"
+        numero="2"
+        titulo="Indicadores sociales de Bolívar frente al total nacional"
+        caption="Pobreza, necesidades básicas insatisfechas y coberturas de educación, salud, acueducto y alcantarillado en Bolívar, Cartagena y Colombia"
+        fuente="DANE (Pobreza monetaria departamental 2025; Pobreza multidimensional 2025; CNPV 2018: NBI y servicios públicos; ECV 2018: afiliación en salud); Ministerio de Educación Nacional, SIMAT (2023); Cartagena Cómo Vamos y El Universal para la pobreza de Cartagena."
+        nota="n. d. = no disponible o no comparable. La cobertura educativa de Bolívar no incluye a Cartagena, que es una entidad territorial certificada aparte. La pobreza multidimensional de Bolívar y la monetaria de Cartagena provienen de prensa que cita al DANE y se deben contrastar con el boletín oficial."
+      >
+        <thead>
+          <tr>
+            <th scope="col">Indicador</th>
+            <th scope="col">Bolívar</th>
+            <th scope="col">Cartagena</th>
+            <th scope="col">Colombia</th>
+            <th scope="col">Año</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row">Pobreza monetaria (%)</th><td class="bol">44,8</td><td>34,6</td><td class="col">28,0</td><td>2025</td></tr>
+          <tr><th scope="row">Pobreza monetaria extrema (%)</th><td class="bol">15,7</td><td>9,2</td><td class="col">9,6</td><td>2025</td></tr>
+          <tr><th scope="row">Pobreza multidimensional (%)</th><td class="bol">17,0</td><td class="nd">n. d.</td><td class="col">9,9</td><td>2025</td></tr>
+          <tr><th scope="row">Necesidades básicas insatisfechas, NBI (%)</th><td class="bol">26,7</td><td>12,5</td><td class="col">14,3</td><td>2018</td></tr>
+          <tr><th scope="row">Cobertura de educación (cobertura neta, 5 a 16 años, %)</th><td class="bol">99,5</td><td class="nd">n. d.</td><td class="nd col">n. d.</td><td>2023</td></tr>
+          <tr><th scope="row">Cobertura de salud (afiliación al sistema, %)</th><td class="bol">93,7</td><td class="nd">n. d.</td><td class="col">93,5</td><td>2018</td></tr>
+          <tr><th scope="row">Cobertura de acueducto (% de viviendas)</th><td class="bol">78,7</td><td>93,7</td><td class="col">86,4</td><td>2018</td></tr>
+          <tr><th scope="row">Cobertura de alcantarillado (% de viviendas)</th><td class="bol">50,9</td><td>86,8</td><td class="col">76,6</td><td>2018</td></tr>
+        </tbody>
+      </Tabla>
+
+      <Interpretacion>
+        <p>Bolívar está peor que el promedio nacional en casi todos los indicadores sociales. La pobreza monetaria ({'44,8'} % frente a 28,0 %) y la pobreza monetaria extrema ({'15,7'} % frente a 9,6 %) son entre 1,6 y 1,7 veces las nacionales. La pobreza multidimensional (17,0 % frente a 9,9 %) subió en 2025 mientras bajó en el país, y las privaciones más frecuentes son el empleo informal y el bajo logro educativo.</p>
+        <p>Las brechas de infraestructura son aún más marcadas: solo la mitad de las viviendas del departamento (50,9 %) tenía alcantarillado en el censo de 2018, frente a 76,6 % en el país. Las necesidades básicas insatisfechas casi duplican la media nacional (26,7 % frente a 14,3 %).</p>
+        <p>Cartagena está en mejor situación que el departamento (acueducto de 93,7 % y alcantarillado de 86,8 %, por encima del promedio nacional), lo que indica que el rezago se concentra en los municipios pequeños y rurales. Es una desigualdad territorial interna: la capital se parece al país; el resto de Bolívar, no.</p>
+        <p>La afiliación a salud (93,7 %) es casi igual a la nacional (93,5 %), de modo que el aseguramiento es el único indicador en que Bolívar está en el promedio.</p>
+      </Interpretacion>
+    </div>
+  </section>
+
+  <div class="wrap"><Pager path="/departamento" /></div>
+</BaseLayout>

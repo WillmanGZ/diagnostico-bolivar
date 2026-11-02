@@ -1,0 +1,10 @@
+---
+import { pager } from '../lib/nav';
+const { path } = Astro.props;
+const { prev, next } = pager(path);
+---
+
+<nav class="pager" aria-label="Navegación entre secciones">
+  {prev ? <a href={prev.href} rel="prev">← {prev.label}</a> : <span />}
+  {next ? <a href={next.href} rel="next">{next.label} →</a> : <span />}
+</nav>

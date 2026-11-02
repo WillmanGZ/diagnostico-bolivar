@@ -1,0 +1,88 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Pager from '../components/Pager.astro';
+import { fotos } from '../data/fotos';
+
+const oficiales = [
+  { t: 'DANE. (2026). Cuentas nacionales departamentales: PIB por departamento. Anexos estadísticos 2005-2025 preliminar (base 2015). Actualización del 3 de julio de 2026.', u: 'https://www.dane.gov.co/index.php/estadisticas-por-tema/cuentas-nacionales/cuentas-nacionales-departamentales', uso: 'Tablas 3 y 4: PIB, crecimiento, participación, PIB por habitante y valor agregado por actividad.' },
+  { t: 'DANE. (2026). Boletín técnico: Producto Interno Bruto por Departamento (PIBDEP), 2025 preliminar.', u: 'https://www.dane.gov.co/files/operaciones/PIB/bol-PIBDep-2025pr.pdf', uso: 'Contexto del PIB departamental y regional 2025.' },
+  { t: 'DANE. (2026). Índice de Precios al Consumidor: variaciones mensuales por ciudades, 2017-2026 (archivo «IPC ciudades», actualizado el 7 de octubre de 2026).', u: 'https://www.dane.gov.co/index.php/estadisticas-por-tema/precios-y-costos/indice-de-precios-al-consumidor-ipc', uso: 'Tabla 5: inflación de Cartagena y total nacional.' },
+  { t: 'DANE. (2026). Gran Encuesta Integrada de Hogares (GEIH): Mercado laboral por departamentos, serie anual 2007-2025 (actualizado el 15 de abril de 2026).', u: 'https://www.dane.gov.co/index.php/estadisticas-por-tema/mercado-laboral/empleo-y-desempleo', uso: 'Tabla 6: desempleo, ocupación y participación de Bolívar; ocupados por rama.' },
+  { t: 'DANE. (2026). GEIH, boletín técnico y anexo de diciembre de 2025.', u: 'https://www.dane.gov.co/files/operaciones/GEIH/bol-GEIH-dic2025.pdf', uso: 'Tabla 6: desempleo, TGP y TO de Colombia; año móvil de Cartagena.' },
+  { t: 'DANE. (2026). GEIH, Empleo informal y seguridad social, boletín técnico y anexo, octubre-diciembre de 2025.', u: 'https://www.dane.gov.co/files/operaciones/GEIH/bol-GEIHEISS-oct-dic2025.pdf', uso: 'Tabla 7: informalidad de Colombia, 13 ciudades y Cartagena.' },
+  { t: 'DANE. (2026). Pobreza monetaria departamental 2025 (comunicado de prensa).', u: 'https://www.dane.gov.co/files/operaciones/PM/cp-PMDepartamental-2025.pdf', uso: 'Tabla 2: pobreza monetaria y extrema por departamento.' },
+  { t: 'DANE. (2026). Pobreza multidimensional 2025 (boletín técnico).', u: 'https://www.dane.gov.co/files/operaciones/PM/bol-PMultidimensional-2025.pdf', uso: 'Tabla 2: pobreza multidimensional.' },
+  { t: 'DANE. (2021). Censo Nacional de Población y Vivienda 2018: Necesidades Básicas Insatisfechas (NBI), total nacional y departamental.', u: 'https://www.dane.gov.co/files/censo2018/informacion-tecnica/CNPV-2018-NBI.xlsx', uso: 'Tabla 2: NBI.' },
+  { t: 'DANE. (2020). Información para todos: Gobernación de Bolívar y Alcaldía de Cartagena. Censo 2018 y Encuesta de Calidad de Vida 2018.', u: 'https://www.dane.gov.co/files/investigaciones/planes-desarrollo-territorial/030220-Info-Gobernacion-Bolivar.pdf', uso: 'Tabla 2: acueducto, alcantarillado y afiliación en salud.' },
+  { t: 'DANE. (2018). Marco Geoestadístico Nacional: departamentos.', u: 'https://geoportal.dane.gov.co/', uso: 'Mapa de Colombia.' },
+];
+const otras = [
+  { t: 'Unidad de Planificación Rural Agropecuaria (UPRA). Documento regional Bolívar: indicadores de superficie y población (proyecciones DANE-CNPV 2018).', u: 'https://upra.gov.co/Kit_Territorial/2-%20Informaci%C3%B3n%20por%20Departamentos/BOL%C3%8DVAR/2-%20Documento%20Regional%20UPRA%20Bol%C3%ADvar.pdf', uso: 'Tabla 1: superficie, municipios, población urbana y rural.' },
+  { t: 'Ministerio de Educación Nacional. Estadísticas sectoriales, departamento de Bolívar (SIMAT).', u: 'https://portalsineb.mineducacion.gov.co/1782/articles-412172_DPTO_BOLIVAR.pdf', uso: 'Tabla 2: cobertura educativa.' },
+  { t: 'Cartagena Cómo Vamos. Informe de Calidad de Vida de Cartagena 2025 e infografía de inflación 2025.', u: 'https://cartagenacomovamos.org/', uso: 'Población de Cartagena; grupos de gasto del IPC.' },
+  { t: 'El Universal (Cartagena). Pobreza multidimensional cayó en 2025 en Colombia pero creció en Bolívar (14 de abril de 2026).', u: 'https://www.eluniversal.com.co/economica/2026/04/14/pobreza-multidimensional-cayo-en-2025-en-colombia-pero-crecio-en-bolivar/', uso: 'Pobreza multidimensional de Bolívar (cita al DANE).' },
+  { t: 'El Universal. Gobernación finalizó la socialización del Plan de Desarrollo de Bolívar 2024-2027 (24 de mayo de 2024).', u: 'https://www.eluniversal.com.co/politica/2024/05/24/gobernacion-finalizo-la-socializacion-del-plan-de-desarrollo-de-bolivar-2024-2027/', uso: 'Plan «Bolívar me enamora».' },
+  { t: 'Alcaldía de Cartagena de Indias. Plan de Ordenamiento Territorial (Decreto 0977 de 2001).', u: 'https://www.cartagena.gov.co/', uso: 'Extensión del distrito.' },
+];
+const fotosLista = Object.values(fotos);
+---
+
+<BaseLayout
+  title="Fuentes"
+  path="/fuentes"
+  description="Fuentes de la investigación sobre Bolívar: bases y boletines del DANE, UPRA, Ministerio de Educación, Cartagena Cómo Vamos y créditos de fotos."
+>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="kicker">5. Fuentes de información</p>
+      <h1>Fuentes y referencias</h1>
+      <p class="lead">Toda la investigación se apoya en información oficial y verificable. Cada tabla indica su fuente, su año y su dominio geográfico.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap">
+      <h2>Fuentes oficiales</h2>
+      <ol class="refs">
+        {oficiales.map((r) => (
+          <li>
+            <p>{r.t} <a href={r.u} rel="noopener noreferrer">{r.u}</a></p>
+            <p class="source"><strong>Se usó en:</strong> {r.uso}</p>
+          </li>
+        ))}
+      </ol>
+
+      <h2 class="mt-3">Otras fuentes y apoyo</h2>
+      <ol class="refs">
+        {otras.map((r) => (
+          <li>
+            <p>{r.t} <a href={r.u} rel="noopener noreferrer">{r.u}</a></p>
+            <p class="source"><strong>Se usó en:</strong> {r.uso}</p>
+          </li>
+        ))}
+      </ol>
+
+      <h2 class="mt-3">Notas metodológicas</h2>
+      <ul>
+        <li><strong>Cifras provisionales.</strong> Los datos de PIB de 2024 son provisionales (p) y los de 2025 preliminares (pr); el DANE puede revisarlos.</li>
+        <li><strong>Participación.</strong> Se calcula con valores a precios corrientes; el crecimiento, con variaciones reales (en volumen, año de referencia 2015) publicadas por el DANE.</li>
+        <li><strong>Desempleo de Colombia.</strong> Es el promedio anual de la serie mensual de la GEIH (desocupados sobre fuerza de trabajo); reproduce las cifras que publica el DANE.</li>
+        <li><strong>Informalidad de Cartagena.</strong> Cálculo propio como promedio de los cuatro trimestres de cada año; reproduce las cifras oficiales del total nacional y la de Cartagena en 2025 (49,6 %). Solo existe una serie comparable desde 2021.</li>
+        <li><strong>Inflación.</strong> El DANE no publica el IPC por departamento; se usa Cartagena como referencia de la capital.</li>
+        <li><strong>Cifras de prensa.</strong> La pobreza multidimensional de Bolívar, la pobreza monetaria de Cartagena y los grupos de gasto del IPC de 2025 provienen de medios o análisis de terceros que citan al DANE; deben contrastarse con los documentos oficiales.</li>
+        <li><strong>Pendiente.</strong> Informalidad de 2016 a 2020, cobertura educativa nacional comparable y desempleo anual de Cartagena anterior a 2021.</li>
+        <li><strong>Reproducibilidad.</strong> Los anexos originales están en <code>data/raw</code> y las cifras se generan con <code>scripts/build-data.mjs</code>.</li>
+      </ul>
+
+      <h2 class="mt-3">Créditos de las fotografías</h2>
+      <p>Todas las fotografías provienen de Wikimedia Commons con licencias libres (Creative Commons). Se muestran autor y licencia en cada pie de foto.</p>
+      <ul>
+        {fotosLista.map((f) => (
+          <li>{f.caption} <a href={f.url} rel="noopener noreferrer">{f.autor}, {f.licencia}</a></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <div class="wrap"><Pager path="/fuentes" /></div>
+</BaseLayout>

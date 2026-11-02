@@ -147,3 +147,12 @@ vite.config.ts.timestamp-*
 
 # Turbo Repo
 .turbo
+
+# Vercel y entorno local
+.vercel
+.env
+.env.*
+!.env.example
+
+# Configuración local del asistente
+.claude/

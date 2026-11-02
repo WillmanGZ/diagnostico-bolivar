@@ -1,0 +1,309 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Tabla from '../components/Tabla.astro';
+import Interpretacion from '../components/Interpretacion.astro';
+import LineChart from '../components/LineChart.astro';
+import Pager from '../components/Pager.astro';
+import Foto from '../components/Foto.astro';
+import empleo from '../data/empleo.json';
+import informalidad from '../data/informalidad.json';
+import pib from '../data/pib.json';
+import { fotos } from '../data/fotos';
+import { n0, n1, sgn } from '../lib/format';
+
+const e = empleo.serie;
+const inf = informalidad.serie;
+const e25 = e.at(-1)!;
+const infConDato = inf.filter((p) => p.cartagena != null);
+const maxTd = [...e].sort((a, b) => b.bolivar - a.bolivar)[0];
+const minTd = [...e].sort((a, b) => a.bolivar - b.bolivar)[0];
+const ramas = empleo.ramas;
+const maxRama = Math.max(...ramas.map((r) => r.share2025));
+const corta = (s: string) => s.replace(/, entretenimiento, recreación y otras actividades de servicios/, ' y otros servicios').replace('Administración pública y defensa, educación y atención de la salud humana', 'Administración pública, educación y salud').replace('Actividades profesionales, científicas, técnicas y de servicios administrativos', 'Actividades profesionales y administrativas').replace('Comercio y reparación de vehículos', 'Comercio y reparación de vehículos').replace('Suministro de electricidad, gas, agua y gestión de desechos', 'Electricidad, gas, agua y desechos').replace('Agricultura, ganadería, caza, silvicultura y pesca', 'Agricultura, ganadería, caza, silvicultura y pesca');
+---
+
+<BaseLayout
+  title="Desempleo e informalidad"
+  path="/empleo"
+  description="Mercado laboral de Bolívar y Cartagena frente a Colombia: desempleo, ocupación, participación, ocupados por rama de actividad e informalidad laboral."
+>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="kicker">2.3 Variables económicas</p>
+      <h1>Desempleo e informalidad</h1>
+      <p class="lead">Bolívar pasó de tener 6 puntos menos de desempleo que Colombia en 2019 a quedar por encima del promedio nacional en 2024 y 2025.</p>
+      <ul class="toc">
+        <li><a href="#desempleo">Desempleo (Tabla 6)</a></li>
+        <li><a href="#ocupacion">Ocupación y ramas</a></li>
+        <li><a href="#analisis-desempleo">Análisis del desempleo</a></li>
+        <li><a href="#informalidad">Informalidad (Tabla 7)</a></li>
+        <li><a href="#analisis-informalidad">Análisis de la informalidad</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="section" id="desempleo">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Tasa de desempleo</h2>
+      </div>
+      <div class="note">
+        <p><strong>Dominio geográfico.</strong> El DANE publica la Gran Encuesta Integrada de Hogares (GEIH) con resultados anuales para el <strong>departamento de Bolívar</strong> completo, que es la serie principal de esta tabla. Para Cartagena (la capital) se incluye aparte el año móvil enero-diciembre disponible desde 2021, cuando la GEIH fue rediseñada. El total de comparación es el <strong>total nacional</strong>.</p>
+      </div>
+
+      <Tabla
+        id="tabla-6"
+        numero="6"
+        titulo="Comportamiento del desempleo, 2016-2025"
+        caption="Tasa de desempleo del departamento de Bolívar, de Cartagena y de Colombia, con diferencias en puntos porcentuales"
+        fuente="DANE, GEIH. Bolívar: anexo «Empleo departamentos», serie anual 2007-2025. Colombia: promedio anual de la serie mensual del anexo GEIH de diciembre de 2025. Cartagena: año móvil enero-diciembre de la GEIH rediseñada."
+        nota="Tasa de desocupación (TD) en porcentaje de la fuerza de trabajo. Diferencia = Bolívar − Colombia (pp). Los datos departamentales provienen de una encuesta por muestreo y tienen un margen de error mayor que los nacionales. n. d. = no disponible con la metodología vigente."
+      >
+        <thead>
+          <tr>
+            <th scope="col">Año</th>
+            <th scope="col">Desempleo departamento de Bolívar (%)</th>
+            <th scope="col">Desempleo Colombia (%)</th>
+            <th scope="col">Diferencia (pp)</th>
+            <th scope="col">Desempleo capital, Cartagena (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {e.map((p) => (
+            <tr>
+              <th scope="row">{p.year}</th>
+              <td class="bol">{n1(p.bolivar)}</td>
+              <td class="col">{n1(p.colombia)}</td>
+              <td class:list={[p.dif > 0 ? 'neg' : 'pos']}>{sgn(p.dif)}</td>
+              <td class:list={[p.cartagena == null ? 'nd' : '']}>{n1(p.cartagena)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Tabla>
+      <p class="source">En la columna de diferencia, el verde indica que el desempleo de Bolívar fue menor que el nacional y el rojo, que fue mayor.</p>
+
+      <LineChart
+        titulo="Tasa de desempleo: Bolívar, Cartagena y Colombia"
+        subtitulo="Porcentaje de la fuerza de trabajo, promedio anual"
+        desc="Desempleo anual. Bolívar está bien por debajo de Colombia hasta 2019, con 4,7 por ciento frente a 10,9. En 2020 sube a 9,8 y en 2021 llega a su máximo de 12,8, mientras Colombia llega a 16,5 en 2020. En 2024 y 2025 Bolívar queda por encima del promedio nacional. Cartagena, disponible desde 2021, se mantiene entre 10,9 y 12,4 por ciento."
+        labels={e.map((p) => String(p.year))}
+        series={[
+          { name: 'Bolívar (departamento)', color: 'var(--bol)', values: e.map((p) => p.bolivar), marker: 'circle' },
+          { name: 'Colombia', color: 'var(--col)', values: e.map((p) => p.colombia), marker: 'square', dash: '6 4' },
+          { name: 'Cartagena (capital)', color: 'var(--third)', values: e.map((p) => p.cartagena), marker: 'diamond' },
+        ]}
+      />
+
+      <Interpretacion>
+        <p>Hasta 2019 el desempleo de Bolívar era bajo y decreciente: pasó de {n1(e[0].bolivar)} % en 2016 a {n1(minTd.bolivar)} % en {minTd.year}, el mínimo de la serie, entre 3 y 6 puntos por debajo del nacional. La pandemia lo llevó a {n1(e[4].bolivar)} % en 2020 y a {n1(maxTd.bolivar)} % en {maxTd.year}, el máximo, un año en que la economía ya crecía pero más personas volvieron a buscar empleo. Desde entonces bajó a {n1(e[7].bolivar)} % en 2023, repuntó a {n1(e[8].bolivar)} % en 2024 y cerró 2025 en {n1(e25.bolivar)} %.</p>
+        <p>La brecha con el país se cerró y se invirtió: en 2024 y 2025 Bolívar tiene más desempleo que Colombia (+{n1(e[8].dif)} y +{n1(e[9].dif)} pp). Cartagena, por su parte, está por encima del promedio nacional desde 2023 (10,9 % frente a 10,2 %; 12,4 % frente a 10,2 % en 2024; 10,9 % frente a 8,9 % en 2025). Colombia mejoró con fuerza en 2025 (8,9 %, la cifra más baja de la serie) y Bolívar no acompañó esa mejora.</p>
+      </Interpretacion>
+    </div>
+  </section>
+
+  <section class="section alt" id="ocupacion">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Ocupación, participación y población ocupada</h2>
+      </div>
+
+      <Tabla
+        id="tabla-6b"
+        numero="6b"
+        titulo="Tasas de ocupación y participación y población en Bolívar"
+        caption="Tasa global de participación, tasa de ocupación y población ocupada y desocupada en Bolívar frente a Colombia"
+        fuente="DANE, GEIH (anexos «Empleo departamentos» y GEIH diciembre de 2025)."
+        nota="TGP: tasa global de participación; TO: tasa de ocupación. Población en miles de personas. La caída de la TGP de Bolívar en 2024 es inusualmente fuerte y debe leerse con cautela por el error muestral de la encuesta departamental."
+      >
+        <thead>
+          <tr>
+            <th scope="col">Año</th>
+            <th scope="col">TGP Bolívar (%)</th>
+            <th scope="col">TGP Colombia (%)</th>
+            <th scope="col">TO Bolívar (%)</th>
+            <th scope="col">TO Colombia (%)</th>
+            <th scope="col">Ocupados Bolívar (miles)</th>
+            <th scope="col">Desocupados Bolívar (miles)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {e.map((p) => (
+            <tr>
+              <th scope="row">{p.year}</th>
+              <td class="bol">{n1(p.tgpBol)}</td>
+              <td class="col">{n1(p.tgpCol)}</td>
+              <td class="bol">{n1(p.toBol)}</td>
+              <td class="col">{n1(p.toCol)}</td>
+              <td>{n1(p.ocupadosBol)}</td>
+              <td>{n1(p.desocupadosBol)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Tabla>
+
+      <h3 class="mt-3">Actividades que generan empleo</h3>
+      <p>En 2025 había {n0(empleo.totalOcupados2025 * 1000)} personas ocupadas en Bolívar. Las ramas que más empleo generan son:</p>
+      <div class="chart">
+        <h3>Población ocupada por rama de actividad, Bolívar, 2025</h3>
+        <p class="sub">Porcentaje del total de ocupados</p>
+        <ul class="bars">
+          {ramas.slice(0, 10).map((r) => (
+            <li>
+              <span class="name">{corta(r.label)}</span>
+              <div class="row"><div class="track"><div class={`fill bol w-${Math.round((r.share2025 / maxRama) * 100)}`}></div></div><span class="num">{n1(r.share2025)} %</span></div>
+            </li>
+          ))}
+        </ul>
+        <p class="source"><strong>Fuente:</strong> DANE, GEIH, ocupados por ramas de actividad CIIU Rev. 4 A.C., departamentos, 2025. Los ocupados de las diez ramas mostradas suman la mayor parte de los {n0(empleo.totalOcupados2025 * 1000)}.</p>
+      </div>
+
+      <Interpretacion>
+        <p>El empleo está repartido entre pocas ramas de bajo valor agregado: el comercio ({n1(ramas[0].share2025)} %) y la agricultura ({n1(ramas[1].share2025)} %) emplean a casi una de cada tres personas ocupadas, y con el transporte y los servicios personales suman más de la mitad. La administración pública, la educación y la salud, que aportan 20 % del valor agregado, emplean solo {n1(ramas.find((r) => r.label.startsWith('Administración'))!.share2025)} % de los ocupados. La industria, que aporta 16,4 % del valor agregado, emplea apenas {n1(ramas.find((r) => r.label === 'Industrias manufactureras')!.share2025)} %: es capital intensiva y está concentrada en Mamonal, así que genera poco empleo directo.</p>
+      </Interpretacion>
+    </div>
+  </section>
+
+  <section class="section" id="analisis-desempleo">
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <h2>Análisis del desempleo</h2>
+      </div>
+
+      <h3>¿Cómo ha evolucionado el desempleo en los últimos diez años?</h3>
+      <p>En dos fases. Entre 2016 y 2019 el desempleo de Bolívar bajó de {n1(e[0].bolivar)} % a {n1(e[3].bolivar)} %. Desde 2020 sube a niveles de dos dígitos, alcanza {n1(maxTd.bolivar)} % en {maxTd.year} y se mantiene alrededor de 9 % a 11 %, sin volver al piso previo a la pandemia.</p>
+
+      <h3>¿Cuándo fueron las mayores y menores tasas?</h3>
+      <p>La menor fue la de {minTd.year} ({n1(minTd.bolivar)} %) y la mayor, la de {maxTd.year} ({n1(maxTd.bolivar)} %). En Colombia el máximo fue 2020 (16,5 %) y el mínimo, 2025 (8,9 %).</p>
+
+      <h3>¿El desempleo de la capital está por encima o por debajo del promedio nacional?</h3>
+      <p>Para Cartagena solo hay datos comparables desde 2021. Estuvo por debajo del nacional en 2021 y 2022 (12,3 % frente a 13,8 %, y 10,9 % frente a 11,2 %) y por encima desde 2023, con una brecha de 2,0 puntos porcentuales en 2025. El departamento en su conjunto sigue la misma tendencia, con una brecha menor (+0,5 pp en 2025).</p>
+
+      <h3>¿Qué actividades generan más empleo?</h3>
+      <p>El comercio, la agricultura, el transporte y almacenamiento, los servicios personales y la administración pública, educación y salud (ver el gráfico de ramas). Son actividades intensivas en trabajo y en buena parte informales.</p>
+
+      <h3>¿Qué factores pueden explicar los niveles de desempleo?</h3>
+      <ul>
+        <li><strong>Estructura productiva concentrada en servicios estacionales</strong>, como turismo, comercio y transporte, sensibles a los choques de demanda.</li>
+        <li><strong>Industria y puerto que emplean poco</strong> por unidad de producto.</li>
+        <li><strong>Mayor participación laboral</strong> tras la pandemia: cuando más personas buscan empleo, el desempleo sube aunque se creen puestos.</li>
+        <li><strong>Desaceleración reciente</strong>: el PIB casi no crece desde 2023, lo que frena la creación de empleo.</li>
+        <li><strong>Brechas de educación y de infraestructura</strong> en los municipios pequeños, que limitan la generación de empleo formal fuera de Cartagena.</li>
+      </ul>
+
+      <h3>¿Qué relación hay entre el crecimiento del PIB y el desempleo?</h3>
+      <p>Es la relación esperada: se mueven en sentido contrario, con rezago. Con un PIB creciendo 3,6 % en 2019, el desempleo estaba en {n1(e[3].bolivar)} %. Con la caída de {n1(Math.abs(pib.serie[4].growthBol))} % en 2020, subió {n1(e[4].bolivar - e[3].bolivar)} puntos. En 2021 el PIB se recuperó 14,3 % y el desempleo siguió subiendo ({n1(e[5].bolivar)} %) porque la participación laboral se recuperó más rápido que el empleo. Con el estancamiento de 2023-2024 (0,6 % y 0,3 %), el desempleo volvió a subir en 2024 (+{n1(e[8].bolivar - e[7].bolivar)} pp). Crecer es condición necesaria, pero la composición del crecimiento importa: sectores que crecen sin emplear mucho (industria, puerto) no reducen el desempleo.</p>
+    </div>
+  </section>
+
+  <section class="section alt" id="informalidad">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Informalidad laboral</h2>
+      </div>
+      <div class="note">
+        <p><strong>Definición y dominio.</strong> El DANE mide la ocupación informal con la GEIH rediseñada, que cambió el método desde 2021 (según el empleador o el tipo de trabajo independiente y su registro). Por eso la serie comparable para Cartagena, la capital de Bolívar, y para Colombia empieza en 2021; <strong>no se mezcló</strong> con la medición anterior, que usaba otra definición. Los años 2016-2020 quedan como «n. d.».</p>
+      </div>
+
+      <Tabla
+        id="tabla-7"
+        numero="7"
+        titulo="Comportamiento de la informalidad laboral, 2016-2025"
+        caption="Proporción de ocupados informales en Cartagena y en Colombia, con diferencia en puntos porcentuales y referencia de las 13 ciudades"
+        fuente="DANE, GEIH, boletín técnico y anexo «Empleo informal y seguridad social», octubre-diciembre de 2025. Colombia y 13 ciudades: cifras publicadas por el DANE. Cartagena: cálculo propio como promedio de los cuatro trimestres de cada año."
+        nota="Proporción de la población ocupada que es informal (%). Diferencia = Cartagena − Colombia (pp). Cartagena es la capital de Bolívar y la única ciudad del departamento incluida en la muestra de ciudades de la GEIH. n. d. = no disponible con la metodología vigente."
+      >
+        <thead>
+          <tr>
+            <th scope="col">Año</th>
+            <th scope="col">Informalidad capital, Cartagena (%)</th>
+            <th scope="col">Informalidad Colombia (%)</th>
+            <th scope="col">Diferencia (pp)</th>
+            <th scope="col">13 ciudades y áreas metropolitanas (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {inf.map((p) => (
+            <tr>
+              <th scope="row">{p.year}</th>
+              <td class:list={[p.cartagena == null ? 'nd' : 'bol']}>{n1(p.cartagena)}</td>
+              <td class:list={[p.colombia == null ? 'nd' : 'col']}>{n1(p.colombia)}</td>
+              <td class:list={[p.dif == null ? 'nd' : p.dif > 0 ? 'neg' : 'pos']}>{sgn(p.dif)}</td>
+              <td class:list={[p.trece == null ? 'nd' : '']}>{n1(p.trece)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Tabla>
+
+      <LineChart
+        titulo="Proporción de ocupados informales, 2021-2025"
+        subtitulo="Porcentaje de la población ocupada"
+        desc="Informalidad laboral entre 2021 y 2025. Cartagena empieza en 62,0 por ciento, por encima del total nacional con 59,4, y baja a 49,6 en 2025 mientras Colombia baja a 55,7. Las 13 ciudades principales son más formales, con 42,2 por ciento en 2025."
+        labels={infConDato.map((p) => String(p.year))}
+        series={[
+          { name: 'Cartagena (capital)', color: 'var(--bol)', values: infConDato.map((p) => p.cartagena), marker: 'circle' },
+          { name: 'Colombia', color: 'var(--col)', values: infConDato.map((p) => p.colombia), marker: 'square', dash: '6 4' },
+          { name: '13 ciudades y A.M.', color: 'var(--third)', values: infConDato.map((p) => p.trece), marker: 'diamond' },
+        ]}
+        cero={false}
+      />
+
+      <Interpretacion>
+        <p>La informalidad en Cartagena cayó con fuerza: de {n1(inf[5].cartagena)} % en 2021 a {n1(inf[9].cartagena)} % en 2025, una baja de {n1((inf[5].cartagena ?? 0) - (inf[9].cartagena ?? 0))} puntos. En 2021 y 2022 estaba por encima del promedio nacional ({sgn(inf[5].dif)} y {sgn(inf[6].dif)} pp); desde 2023 está por debajo ({sgn(inf[7].dif)}, {sgn(inf[8].dif)} y {sgn(inf[9].dif)} pp). Aun así, casi uno de cada dos ocupados en la ciudad es informal, y la cifra de Cartagena está por encima de la de las 13 principales ciudades ({n1(inf[9].trece)} %).</p>
+        <p>En el departamento la situación es peor: el trabajo informal es la privación más frecuente en la pobreza multidimensional de Bolívar, con 83,4 % en 2025 (DANE, citado por El Universal).</p>
+      </Interpretacion>
+    </div>
+  </section>
+
+  <section class="section" id="analisis-informalidad">
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <h2>Análisis de la informalidad laboral</h2>
+      </div>
+
+      <h3>¿Cómo ha evolucionado en los últimos años?</h3>
+      <p>Con datos comparables desde 2021, la informalidad en Cartagena bajó de manera sostenida hasta 2024 ({n1(inf[8].cartagena)} %) y se estabilizó en 2025 ({n1(inf[9].cartagena)} %), un leve aumento de {n1((inf[9].cartagena ?? 0) - (inf[8].cartagena ?? 0))} pp. A escala nacional la baja fue mucho menor, de 59,4 % a 55,7 %.</p>
+
+      <h3>¿Cuándo fueron los mayores y menores niveles?</h3>
+      <p>El mayor fue el de 2021 ({n1(inf[5].cartagena)} %), con la economía saliendo de la pandemia, y el menor el de 2024 ({n1(inf[8].cartagena)} %).</p>
+
+      <h3>¿Está por encima o por debajo del promedio nacional?</h3>
+      <p>Por debajo desde 2023. Pero el promedio nacional es muy alto porque incluye la ruralidad (83,5 % de informalidad en centros poblados y rural disperso en 2025); frente a las 13 principales ciudades ({n1(inf[9].trece)} %), Cartagena está {n1((inf[9].cartagena ?? 0) - (inf[9].trece ?? 0))} puntos por encima.</p>
+
+      <h3>¿En qué actividades se concentra el empleo informal?</h3>
+      <p>En general, en el comercio al por menor, el transporte, el alojamiento y la comida, la construcción, la agricultura y los servicios personales. En Bolívar esas actividades emplean a la mayoría de los ocupados: comercio y agricultura, juntas, suman cerca de una de cada tres personas empleadas. La anotación vale como caracterización general del DANE para el total nacional; el archivo disponible no desagrega la informalidad por rama para Cartagena.</p>
+
+      <h3>¿Qué factores económicos y sociales la explican?</h3>
+      <ul>
+        <li>Estructura productiva con alto peso de comercio, turismo y servicios de baja productividad.</li>
+        <li>Baja escolaridad: el bajo logro educativo afecta a 39 % de los hogares del departamento.</li>
+        <li>Costos de formalización altos para microempresas y trabajadores por cuenta propia.</li>
+        <li>Débil oferta de empleo formal fuera de Cartagena, y pobreza que empuja a emplearse por necesidad.</li>
+        <li>Economía rural con predominio de la pequeña propiedad y del jornal.</li>
+      </ul>
+
+      <h3>¿Qué consecuencias tiene?</h3>
+      <p>Para los trabajadores: ingresos variables, sin cotización a salud contributiva, pensión ni riesgos laborales, y vejez desprotegida. Para las empresas: menor productividad, poco acceso al crédito y a mercados formales. Para la economía del departamento: menor recaudo y base tributaria, menor productividad media y mayor demanda de subsidios.</p>
+
+      <h3>¿Qué estrategias podrían reducirla?</h3>
+      <ul>
+        <li>Simplificar y abaratar el registro de microempresas y ofrecer regímenes tributarios graduales.</li>
+        <li>Ampliar la protección social para independientes (BEPS, afiliación flexible por días).</li>
+        <li>Formación técnica con el SENA enfocada en los sectores con potencial: logística, turismo, industria y agroindustria.</li>
+        <li>Crédito productivo y formalización de la cadena turística (guías, vendedores, transportadores y artesanos).</li>
+        <li>Inversión en vías, riego y asistencia técnica rural para elevar el ingreso y la formalidad en el campo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap grid grid-2">
+      <Foto foto={fotos.castillo} sizes="(min-width: 72rem) 36rem, 100vw" width={1200} />
+      <div>
+        <h2>Un mercado laboral de servicios</h2>
+        <p>Detrás de estas cifras hay un departamento cuyo empleo depende de actividades que reaccionan rápido a los ciclos del turismo, el comercio y el gasto público. Las tasas son una fotografía anual de una encuesta por muestreo: sirven para ver la tendencia, no para comparar décimas entre años.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><Pager path="/empleo" /></div>
+</BaseLayout>

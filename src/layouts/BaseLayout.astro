@@ -1,0 +1,150 @@
+---
+import '../styles/global.css';
+import { nav } from '../lib/nav';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+}
+const { title, description, path, image = '/og.jpg' } = Astro.props;
+const siteName = 'Bolívar en cifras';
+const fullTitle = path === '/' ? `${siteName} | Diagnóstico socioeconómico, Colombia` : `${title} | ${siteName}`;
+const canonical = new URL(path === '/' ? '/' : path, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+const ogAlt = 'Torre del Reloj y Plaza de los Coches en el centro histórico de Cartagena de Indias, con el título Bolívar en cifras';
+const origin = new URL('/', Astro.site).href;
+const page = nav.find((n) => n.href === path);
+
+// Datos estructurados (JSON-LD): sitio, página, miga de pan y autores.
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'WebSite',
+      '@id': origin + '#sitio',
+      url: origin,
+      name: siteName,
+      description: 'Diagnóstico socioeconómico y análisis macroeconómico del departamento de Bolívar (Colombia).',
+      inLanguage: 'es-CO',
+      publisher: { '@id': origin + '#universidad' },
+    },
+    {
+      '@type': 'CollegeOrUniversity',
+      '@id': origin + '#universidad',
+      name: 'Universidad Libre, Facultad de Ingeniería (Barranquilla)',
+    },
+    {
+      '@type': 'WebPage',
+      '@id': canonical + '#pagina',
+      url: canonical,
+      name: fullTitle,
+      description,
+      inLanguage: 'es-CO',
+      isPartOf: { '@id': origin + '#sitio' },
+      primaryImageOfPage: { '@type': 'ImageObject', url: ogImage, width: 1200, height: 630 },
+      author: [
+        { '@type': 'Person', name: 'Willman Alfredo Giraldo Zambrano' },
+        { '@type': 'Person', name: 'Jaime Enrique Ariza Ortiz' },
+      ],
+      about: { '@type': 'AdministrativeArea', name: 'Bolívar, Colombia' },
+      ...(page && path !== '/'
+        ? {
+            breadcrumb: {
+              '@type': 'BreadcrumbList',
+              itemListElement: [
+                { '@type': 'ListItem', position: 1, name: 'Inicio', item: origin },
+                { '@type': 'ListItem', position: 2, name: page.label, item: canonical },
+              ],
+            },
+          }
+        : {}),
+    },
+  ],
+};
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#0b5c7a" />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta name="author" content="Willman Alfredo Giraldo Zambrano, Jaime Enrique Ariza Ortiz" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_CO" />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={ogAlt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={ogAlt} />
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <slot name="head" />
+  </head>
+  <body>
+    <a class="skip" href="#contenido">Saltar al contenido</a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/" aria-label="Bolívar en cifras, inicio">
+          <svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64" rx="14" fill="var(--primary)"/><rect x="14" y="26" width="8" height="12" rx="2" fill="#ffd9a8"/><rect x="28" y="16" width="8" height="22" rx="2" fill="#ff9a5c"/><rect x="42" y="21" width="8" height="17" rx="2" fill="#fff"/><path d="M8 46c6 0 6-5 12-5s6 5 12 5 6-5 12-5 6 5 12 5" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" opacity=".55"/></svg>
+          <span>Bolívar en cifras</span>
+        </a>
+        <nav class="nav" aria-label="Principal">
+          <ul>
+            {nav.map((n) => (
+              <li><a href={n.href} aria-current={n.href === path ? 'page' : undefined}>{n.label}</a></li>
+            ))}
+          </ul>
+        </nav>
+        <details class="mobile-nav">
+          <summary class="menu-btn">Menú</summary>
+          <div class="menu-list">
+            <nav aria-label="Principal (móvil)">
+              {nav.map((n) => (
+                <a href={n.href} aria-current={n.href === path ? 'page' : undefined}>{n.label}</a>
+              ))}
+            </nav>
+          </div>
+        </details>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="wrap cols">
+        <div>
+          <p><strong>Diagnóstico socioeconómico y análisis macroeconómico del departamento de Bolívar (Colombia)</strong></p>
+          <p>Fundamentos de Economía · Facultad de Ingeniería · Universidad Libre, Barranquilla</p>
+          <p>Docente: Mg. Deiber E. Puello C.</p>
+        </div>
+        <div>
+          <p><strong>Autores</strong></p>
+          <p>Willman Alfredo Giraldo Zambrano<br />Jaime Enrique Ariza Ortiz</p>
+        </div>
+        <div>
+          <p><strong>Datos y créditos</strong></p>
+          <p>Cifras: DANE y fuentes citadas en cada tabla. <a href="/fuentes">Ver fuentes</a>.</p>
+          <p>Fotografías: Wikimedia Commons, con autor y licencia en cada pie de foto.</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

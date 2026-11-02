@@ -1,0 +1,72 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Pager from '../components/Pager.astro';
+import Foto from '../components/Foto.astro';
+import { fotos } from '../data/fotos';
+
+const conclusiones = [
+  {
+    titulo: 'Una economía grande y sensible a los choques',
+    texto: 'Bolívar creció 3,2 % anual entre 2016 y 2019, cayó 10,5 % en 2020, rebotó 14,3 % y 8,5 % en 2021 y 2022, y se frenó desde 2023 con 0,6 %, 0,3 % y 2,0 %. En 2024 y 2025 creció menos que el país (0,3 % frente a 1,5 %, y 2,0 % frente a 2,6 %), así que su recuperación no se ha consolidado.',
+  },
+  {
+    titulo: 'Estructura terciaria y concentrada',
+    texto: 'El comercio, el transporte y el turismo (20,4 %), la administración pública, educación y salud (20,0 %) y la industria (16,4 %) suman 56,8 % del valor agregado de 2025. La construcción y la minería pierden terreno mientras crecen la agricultura y los servicios públicos; la diversificación sigue siendo limitada y se apoya en Cartagena.',
+  },
+  {
+    titulo: 'Peso estable en la economía nacional, pero con menor ingreso por persona',
+    texto: 'Bolívar aporta cerca de 3,6 % del PIB de Colombia, es la séptima economía del país y la segunda del Caribe. Sin embargo, su PIB por habitante fue de 29,7 millones de pesos en 2025, 85 % del nacional (34,9 millones): ser una economía grande no implica mayor producción por persona.',
+  },
+  {
+    titulo: 'Un mercado laboral que pasó de mejor a peor que el nacional',
+    texto: 'Antes de la pandemia el desempleo de Bolívar era 4,7 %, seis puntos menos que el país. En 2024 y 2025 está por encima del promedio nacional (9,4 % frente a 8,9 % en 2025), y Cartagena llegó a 12,4 % en 2024. La informalidad de la capital bajó de 62,0 % a 49,6 % entre 2021 y 2025, pero sigue siendo casi de uno de cada dos ocupados.',
+  },
+  {
+    titulo: 'Inflación como la nacional, con picos en 2022 y 2023',
+    texto: 'Los precios en Cartagena subieron 5,6 % en promedio anual, casi igual que en Colombia (5,7 %). El máximo fue 14,3 % en 2022, un año en que la capital superó al país en 1,2 puntos. En 2025 los servicios (transporte, educación, restaurantes y hoteles, y salud) subieron entre 8 % y 9,5 %, casi el doble de la inflación total de la ciudad.',
+  },
+  {
+    titulo: 'La pobreza y la desigualdad territorial son el principal problema',
+    texto: 'El 44,8 % de la población es pobre por ingresos y 15,7 % está en pobreza extrema, frente a 28,0 % y 9,6 % en Colombia. La pobreza multidimensional aumentó en 2025 (17,0 %) y apenas la mitad de las viviendas tiene alcantarillado. La capital se parece al país; el resto del departamento está muy rezagado.',
+  },
+];
+---
+
+<BaseLayout
+  title="Conclusiones"
+  path="/conclusiones"
+  description="Seis conclusiones sobre la situación económica y social de Bolívar: crecimiento, estructura productiva, peso nacional, empleo, inflación y pobreza."
+>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="kicker">4. Conclusiones</p>
+      <h1>Conclusiones</h1>
+      <p class="lead">Lo que dicen los datos de la última década sobre la economía de Bolívar y su relación con la de Colombia.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap-narrow">
+      <ol class="stack">
+        {conclusiones.map((c, i) => (
+          <li class="card">
+            <p class="kicker tight">Conclusión {i + 1}</p>
+            <h2 class="card-title">{c.titulo}</h2>
+            <p>{c.texto}</p>
+          </li>
+        ))}
+      </ol>
+
+      <h2 class="mt-3">Síntesis</h2>
+      <p><strong>Situación general.</strong> Bolívar es una economía de servicios con centro en Cartagena, con crecimiento similar al nacional en una década pero con peores indicadores sociales y de ingreso.</p>
+      <p><strong>Importancia para Colombia.</strong> Es la séptima economía del país, la segunda del Caribe y un punto de salida al comercio exterior y al turismo.</p>
+      <p><strong>Evolución en diez años.</strong> Crecimiento hasta 2019, caída y rebote por la pandemia, y estancamiento desde 2023.</p>
+      <p><strong>Problemas y oportunidades.</strong> La pobreza, el rezago en saneamiento, el desempleo reciente y la informalidad son los principales problemas; el puerto, el turismo, la agroindustria y la energía son las principales oportunidades.</p>
+      <p><strong>Diferencias con el país.</strong> Bolívar iguala al país en crecimiento acumulado, precios e informalidad de su capital, pero está por debajo en PIB por habitante, pobreza, necesidades básicas y servicios públicos.</p>
+
+      <Foto foto={fotos.mompoxRio} sizes="(min-width: 50rem) 48rem, 100vw" width={1200} />
+    </div>
+  </section>
+
+  <div class="wrap"><Pager path="/conclusiones" /></div>
+</BaseLayout>

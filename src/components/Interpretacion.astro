@@ -1,0 +1,9 @@
+---
+interface Props { titulo?: string }
+const { titulo = 'Interpretación' } = Astro.props;
+---
+
+<div class="interp" role="note">
+  <h3>{titulo}</h3>
+  <slot />
+</div>

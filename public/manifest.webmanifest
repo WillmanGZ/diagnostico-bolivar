@@ -1,0 +1,10 @@
+{
+  "name": "Bolívar en cifras: diagnóstico socioeconómico y macroeconómico",
+  "short_name": "Bolívar en cifras",
+  "lang": "es-CO",
+  "start_url": "/",
+  "display": "browser",
+  "background_color": "#fbf8f2",
+  "theme_color": "#0b5c7a",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

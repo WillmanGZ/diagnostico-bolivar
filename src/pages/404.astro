@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { nav } from '../lib/nav';
+---
+
+<BaseLayout title="Página no encontrada" path="/404" description="La página que busca no existe. Vuelva al inicio o elija una sección.">
+  <section class="section">
+    <div class="wrap-narrow">
+      <p class="kicker">Error 404</p>
+      <h1>Esta página no existe</h1>
+      <p>Revise la dirección o elija una de las secciones de la investigación.</p>
+      <ul class="toc">
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+      </ul>
+    </div>
+  </section>
+</BaseLayout>

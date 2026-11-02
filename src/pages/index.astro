@@ -1,0 +1,147 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import MapaColombia from '../components/MapaColombia.astro';
+import pib from '../data/pib.json';
+import empleo from '../data/empleo.json';
+import inflacion from '../data/inflacion.json';
+import informalidad from '../data/informalidad.json';
+import { fotos } from '../data/fotos';
+import { billones, n1, n2 } from '../lib/format';
+
+const p25 = pib.serie.at(-1)!;
+const e25 = empleo.serie.at(-1)!;
+const i25 = inflacion.serie.at(-1)!;
+const f25 = informalidad.serie.at(-1)!;
+const hero = fotos.sectorAntiguo;
+
+const secciones = [
+  { href: '/departamento', titulo: 'El departamento', texto: 'Ubicación, población, geografía, cultura y turismo. Tablas 1 y 2: caracterización e indicadores sociales frente a Colombia.' },
+  { href: '/pib', titulo: 'Producto Interno Bruto', texto: 'Diez años de PIB, crecimiento real, participación nacional y estructura productiva. Tablas 3 y 4.' },
+  { href: '/inflacion', titulo: 'Inflación', texto: 'IPC de Cartagena frente al nacional, 2017-2025, y los grupos de gasto que más presionaron los precios. Tabla 5.' },
+  { href: '/empleo', titulo: 'Desempleo e informalidad', texto: 'Mercado laboral de Bolívar y Cartagena, ocupación por rama e informalidad. Tablas 6 y 7.' },
+  { href: '/diagnostico', titulo: 'Diagnóstico', texto: 'Fortalezas, problemas, sectores con potencial, oportunidades de inversión y estrategias.' },
+  { href: '/conclusiones', titulo: 'Conclusiones', texto: 'Seis conclusiones que integran los resultados de la investigación.' },
+];
+---
+
+<BaseLayout
+  title="Inicio"
+  path="/"
+  description="Diagnóstico socioeconómico de Bolívar (Colombia): PIB, inflación, desempleo e informalidad 2016-2025 frente al total nacional, con datos del DANE."
+>
+  <section class="hero">
+    <Image
+      src={hero.src}
+      alt={hero.alt}
+      widths={[640, 1024, 1600, 1920]}
+      sizes="100vw"
+      width={1920}
+      loading="eager"
+      fetchpriority="high"
+      format="webp"
+      quality={58}
+    />
+    <div class="wrap">
+      <p class="kicker">Diagnóstico socioeconómico y análisis macroeconómico</p>
+      <h1>Bolívar en cifras</h1>
+      <p class="lead">Cómo ha crecido, cuánto cuestan sus precios y qué tanto empleo genera el departamento más extenso del Caribe colombiano, comparado con el resto del país entre 2016 y 2025.</p>
+      <div class="byline">
+        <span>Willman Alfredo Giraldo Zambrano</span>
+        <span>Jaime Enrique Ariza Ortiz</span>
+        <span>Fundamentos de Economía · Universidad Libre</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Bolívar hoy</p>
+        <h2>Las cifras clave de un vistazo</h2>
+        <p>Valores del último año disponible. Bolívar en naranja; entre paréntesis, la referencia nacional.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="stat">
+          <p class="label">PIB a precios corrientes, 2025 (pr)</p>
+          <p class="value">{billones(p25.pibBol)} billones</p>
+          <p class="ref">{n2(p25.share)} % del PIB de Colombia · puesto {pib.meta.rankBolivar2025} entre los departamentos</p>
+        </div>
+        <div class="stat">
+          <p class="label">Crecimiento real del PIB, 2025</p>
+          <p class="value">{n1(p25.growthBol)} %</p>
+          <p class="ref">Colombia: {n1(p25.growthCol)} %</p>
+        </div>
+        <div class="stat">
+          <p class="label">Desempleo en Bolívar, 2025</p>
+          <p class="value">{n1(e25.bolivar)} %</p>
+          <p class="ref">Colombia: {n1(e25.colombia)} %</p>
+        </div>
+        <div class="stat">
+          <p class="label">Inflación en Cartagena, 2025</p>
+          <p class="value">{n2(i25.cartagena)} %</p>
+          <p class="ref">Colombia: {n2(i25.colombia)} %</p>
+        </div>
+        <div class="stat">
+          <p class="label">Informalidad en Cartagena, 2025</p>
+          <p class="value">{n1(f25.cartagena)} %</p>
+          <p class="ref">Colombia: {n1(f25.colombia)} %</p>
+        </div>
+        <div class="stat">
+          <p class="label">PIB por habitante, 2025 (pr)</p>
+          <p class="value">{n1(pib.meta.perCapitaRatio)} %</p>
+          <p class="ref">del promedio nacional (29,7 frente a 34,9 millones de pesos)</p>
+        </div>
+        <div class="stat">
+          <p class="label">Pobreza monetaria, 2025</p>
+          <p class="value">44,8 %</p>
+          <p class="ref">Colombia: 28,0 %</p>
+        </div>
+        <div class="stat">
+          <p class="label">Necesidades básicas insatisfechas, 2018</p>
+          <p class="value">26,7 %</p>
+          <p class="ref">Colombia: 14,3 %</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap split">
+      <div>
+        <p class="kicker">Resumen</p>
+        <h2>Una economía grande, pero con menos ingreso por persona</h2>
+        <p>Bolívar produce cerca del {n1(pib.meta.promedioParticipacion)} % del PIB colombiano y es la séptima economía del país, la segunda del Caribe después de Atlántico. Entre 2016 y 2025 su producción real creció {n1(pib.meta.realTotalGrowth.bolivar)} %, casi igual que la nacional ({n1(pib.meta.realTotalGrowth.colombia)} %), así que mantuvo su peso sin ganarlo.</p>
+        <p>Su estructura es de servicios: comercio, transporte y turismo, administración pública y manufactura, concentradas en Cartagena. El mercado laboral, que antes de la pandemia tenía menos desempleo que el país, hoy está por encima del promedio nacional, y la pobreza y las carencias de servicios públicos siguen muy por encima de la media.</p>
+        <p>Este sitio reúne la investigación completa: datos, tablas, gráficas, comparaciones con Colombia y la interpretación de cada resultado.</p>
+      </div>
+      <MapaColombia />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="kicker">Contenido</p>
+        <h2>Recorra la investigación</h2>
+      </div>
+      <div class="grid grid-3">
+        {secciones.map((s) => (
+          <a class="card" href={s.href}>
+            <h3>{s.titulo}</h3>
+            <p>{s.texto}</p>
+            <span class="more">Ver sección →</span>
+          </a>
+        ))}
+        <a class="card" href="/fuentes">
+          <h3>Fuentes</h3>
+          <p>Todas las bases de datos, boletines y documentos consultados, con año y enlace.</p>
+          <span class="more">Ver fuentes →</span>
+        </a>
+      </div>
+      <div class="note">
+        <p><strong>Cómo leer las cifras.</strong> Las cifras del PIB de 2024 son provisionales y las de 2025 preliminares: el DANE puede revisarlas. La inflación se mide en Cartagena, que es la referencia de la capital, porque el DANE no calcula el IPC por departamento. Cada tabla indica su fuente, su año y el dominio geográfico que usa.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

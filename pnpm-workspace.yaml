@@ -1,0 +1,5 @@
+# Seguridad de la cadena de suministro
+# No instalar versiones publicadas hace menos de 3 días (en minutos).
+minimumReleaseAge: 4320
+# Ninguna dependencia puede ejecutar scripts de instalación salvo que se autorice aquí.
+allowBuilds: {}

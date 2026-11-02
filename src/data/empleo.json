@@ -1,0 +1,260 @@
+{
+ "fuente": "DANE, GEIH. Bolívar: anexo \"Empleo departamentos\" (serie anual). Colombia: promedio anual de la serie mensual del anexo GEIH de diciembre de 2025. Cartagena: año móvil enero-diciembre (GEIH rediseñada, solo 2021-2025).",
+ "serie": [
+  {
+   "year": 2016,
+   "bolivar": 6.6,
+   "colombia": 9.5,
+   "dif": -2.9,
+   "cartagena": null,
+   "tgpBol": 64.4,
+   "tgpCol": 66.9,
+   "toBol": 60.1,
+   "toCol": 60.5,
+   "ocupadosBol": 868.7,
+   "desocupadosBol": 61.4,
+   "fuerzaTrabajoBol": 930.2
+  },
+  {
+   "year": 2017,
+   "bolivar": 6.1,
+   "colombia": 9.7,
+   "dif": -3.6,
+   "cartagena": null,
+   "tgpBol": 64,
+   "tgpCol": 66.4,
+   "toBol": 60.1,
+   "toCol": 60,
+   "ocupadosBol": 881.9,
+   "desocupadosBol": 57,
+   "fuerzaTrabajoBol": 938.9
+  },
+  {
+   "year": 2018,
+   "bolivar": 5.5,
+   "colombia": 10,
+   "dif": -4.5,
+   "cartagena": null,
+   "tgpBol": 64.8,
+   "tgpCol": 65.7,
+   "toBol": 61.2,
+   "toCol": 59.1,
+   "ocupadosBol": 917.5,
+   "desocupadosBol": 53.8,
+   "fuerzaTrabajoBol": 971.3
+  },
+  {
+   "year": 2019,
+   "bolivar": 4.7,
+   "colombia": 10.9,
+   "dif": -6.2,
+   "cartagena": null,
+   "tgpBol": 64.3,
+   "tgpCol": 64.8,
+   "toBol": 61.2,
+   "toCol": 57.7,
+   "ocupadosBol": 948.2,
+   "desocupadosBol": 46.9,
+   "fuerzaTrabajoBol": 995
+  },
+  {
+   "year": 2020,
+   "bolivar": 9.8,
+   "colombia": 16.5,
+   "dif": -6.7,
+   "cartagena": null,
+   "tgpBol": 60.4,
+   "tgpCol": 60.4,
+   "toBol": 54.5,
+   "toCol": 50.4,
+   "ocupadosBol": 867.1,
+   "desocupadosBol": 94.4,
+   "fuerzaTrabajoBol": 961.5
+  },
+  {
+   "year": 2021,
+   "bolivar": 12.8,
+   "colombia": 13.8,
+   "dif": -1,
+   "cartagena": 12.3,
+   "tgpBol": 64.2,
+   "tgpCol": 61.5,
+   "toBol": 56,
+   "toCol": 53.1,
+   "ocupadosBol": 907.7,
+   "desocupadosBol": 133.5,
+   "fuerzaTrabajoBol": 1041.2
+  },
+  {
+   "year": 2022,
+   "bolivar": 10.8,
+   "colombia": 11.2,
+   "dif": -0.4,
+   "cartagena": 10.9,
+   "tgpBol": 63.7,
+   "tgpCol": 63.6,
+   "toBol": 56.8,
+   "toCol": 56.5,
+   "ocupadosBol": 934.9,
+   "desocupadosBol": 113,
+   "fuerzaTrabajoBol": 1047.9
+  },
+  {
+   "year": 2023,
+   "bolivar": 8.8,
+   "colombia": 10.2,
+   "dif": -1.4,
+   "cartagena": 10.9,
+   "tgpBol": 64.6,
+   "tgpCol": 64.1,
+   "toBol": 58.9,
+   "toCol": 57.6,
+   "ocupadosBol": 982.8,
+   "desocupadosBol": 94.4,
+   "fuerzaTrabajoBol": 1077.2
+  },
+  {
+   "year": 2024,
+   "bolivar": 10.5,
+   "colombia": 10.2,
+   "dif": 0.3,
+   "cartagena": 12.4,
+   "tgpBol": 58.7,
+   "tgpCol": 63.9,
+   "toBol": 52.5,
+   "toCol": 57.4,
+   "ocupadosBol": 889.1,
+   "desocupadosBol": 104,
+   "fuerzaTrabajoBol": 993.1
+  },
+  {
+   "year": 2025,
+   "bolivar": 9.4,
+   "colombia": 8.9,
+   "dif": 0.5,
+   "cartagena": 10.9,
+   "tgpBol": 58.3,
+   "tgpCol": 64.3,
+   "toBol": 52.8,
+   "toCol": 58.6,
+   "ocupadosBol": 906,
+   "desocupadosBol": 93.8,
+   "fuerzaTrabajoBol": 999.8
+  }
+ ],
+ "ramas": [
+  {
+   "label": "Comercio y reparación de vehículos",
+   "v2016": 161.6,
+   "v2019": 176.1,
+   "v2020": 171.6,
+   "v2025": 149.2,
+   "share2025": 16.5
+  },
+  {
+   "label": "Agricultura, ganadería, caza, silvicultura y pesca",
+   "v2016": 156.6,
+   "v2019": 177.1,
+   "v2020": 172.1,
+   "v2025": 140.1,
+   "share2025": 15.5
+  },
+  {
+   "label": "Transporte y almacenamiento",
+   "v2016": 92,
+   "v2019": 101.1,
+   "v2020": 90.2,
+   "v2025": 103.7,
+   "share2025": 11.4
+  },
+  {
+   "label": "Actividades artísticas, entretenimiento, recreación y otras actividades de servicios",
+   "v2016": 82.1,
+   "v2019": 89.8,
+   "v2020": 73.2,
+   "v2025": 101.2,
+   "share2025": 11.2
+  },
+  {
+   "label": "Administración pública y defensa, educación y atención de la salud humana",
+   "v2016": 90.2,
+   "v2019": 99.4,
+   "v2020": 86.7,
+   "v2025": 92,
+   "share2025": 10.2
+  },
+  {
+   "label": "Alojamiento y servicios de comida",
+   "v2016": 77.5,
+   "v2019": 79.9,
+   "v2020": 82.1,
+   "v2025": 87.1,
+   "share2025": 9.6
+  },
+  {
+   "label": "Construcción",
+   "v2016": 63.9,
+   "v2019": 66.4,
+   "v2020": 57.7,
+   "v2025": 74.2,
+   "share2025": 8.2
+  },
+  {
+   "label": "Industrias manufactureras",
+   "v2016": 65.2,
+   "v2019": 83.9,
+   "v2020": 67.6,
+   "v2025": 61.2,
+   "share2025": 6.8
+  },
+  {
+   "label": "Actividades profesionales, científicas, técnicas y de servicios administrativos",
+   "v2016": 40.3,
+   "v2019": 38.7,
+   "v2020": 34.8,
+   "v2025": 51.9,
+   "share2025": 5.7
+  },
+  {
+   "label": "Explotación de minas y canteras",
+   "v2016": 6.2,
+   "v2019": 3.2,
+   "v2020": 3.4,
+   "v2025": 11.9,
+   "share2025": 1.3
+  },
+  {
+   "label": "Suministro de electricidad, gas, agua y gestión de desechos",
+   "v2016": 8.3,
+   "v2019": 8.1,
+   "v2020": 8.6,
+   "v2025": 10.9,
+   "share2025": 1.2
+  },
+  {
+   "label": "Actividades inmobiliarias",
+   "v2016": 5.1,
+   "v2019": 6.8,
+   "v2020": 6.1,
+   "v2025": 9.8,
+   "share2025": 1.1
+  },
+  {
+   "label": "Actividades financieras y de seguros",
+   "v2016": 6.7,
+   "v2019": 6.3,
+   "v2020": 6.5,
+   "v2025": 6.5,
+   "share2025": 0.7
+  },
+  {
+   "label": "Información y comunicaciones",
+   "v2016": 12.7,
+   "v2019": 11.4,
+   "v2020": 6.4,
+   "v2025": 6.2,
+   "share2025": 0.7
+  }
+ ],
+ "totalOcupados2025": 906
+}

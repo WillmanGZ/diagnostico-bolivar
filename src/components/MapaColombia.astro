@@ -1,0 +1,15 @@
+---
+import mapas from '../data/mapas.json';
+const { width, height, departamentos } = mapas.colombia;
+---
+
+<figure class="map">
+  <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="mc-t mc-d">
+    <title id="mc-t">Mapa de Colombia con el departamento de Bolívar resaltado</title>
+    <desc id="mc-d">Bolívar se ubica en el norte del país, sobre el mar Caribe y el valle del río Magdalena, entre Atlántico, Magdalena, Cesar, Santander, Antioquia, Córdoba y Sucre.</desc>
+    {departamentos.map((d) => (
+      <path class:list={['dept', { bolivar: d.bolivar }]} d={d.d}><title>{d.name}</title></path>
+    ))}
+  </svg>
+  <figcaption>Colombia continental. Bolívar aparece en naranja. Fuente: DANE, Marco Geoestadístico Nacional 2018. Se omite el archipiélago de San Andrés por escala.</figcaption>
+</figure>

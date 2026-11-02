@@ -1,0 +1,87 @@
+---
+interface Serie { name: string; color: string; values: (number | null)[]; dash?: string; marker?: 'circle' | 'square' | 'diamond' }
+interface Props {
+  titulo: string;
+  subtitulo?: string;
+  desc: string;
+  labels: string[];
+  series: Serie[];
+  unidad?: string;
+  decimales?: number;
+  cero?: boolean;
+}
+const { titulo, subtitulo, desc, labels, series, unidad = '%', decimales = 1, cero = true } = Astro.props;
+
+const W = 640, H = 340, m = { t: 20, r: 24, b: 38, l: 50 };
+const all = series.flatMap((s) => s.values).filter((v): v is number => v != null);
+const rawMin = cero ? Math.min(0, ...all) : Math.min(...all), rawMax = Math.max(...all);
+const step = (() => {
+  const span = rawMax - rawMin || 1;
+  const pow = 10 ** Math.floor(Math.log10(span / 4));
+  const f = span / 4 / pow;
+  return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * pow;
+})();
+const yMin = Math.floor(rawMin / step) * step, yMax = Math.ceil(rawMax / step) * step;
+const ticks: number[] = [];
+for (let v = yMin; v <= yMax + step / 2; v += step) ticks.push(Math.round(v * 1000) / 1000);
+const x = (i: number) => m.l + (i * (W - m.l - m.r)) / (labels.length - 1);
+const y = (v: number) => m.t + ((yMax - v) * (H - m.t - m.b)) / (yMax - yMin);
+const fmt = (v: number) => new Intl.NumberFormat('es-CO', { minimumFractionDigits: decimales, maximumFractionDigits: decimales }).format(v);
+const pathOf = (s: Serie) => {
+  let d = '';
+  let pen = false;
+  s.values.forEach((v, i) => {
+    if (v == null) { pen = false; return; }
+    d += `${pen ? 'L' : 'M'}${x(i).toFixed(1)} ${y(v).toFixed(1)}`;
+    pen = true;
+  });
+  return d;
+};
+const marker = (s: Serie, cx: number, cy: number) => {
+  const r = 4.2;
+  if (s.marker === 'square') return `M${cx - r} ${cy - r}h${2 * r}v${2 * r}h${-2 * r}z`;
+  if (s.marker === 'diamond') return `M${cx} ${cy - r - 1}L${cx + r + 1} ${cy}L${cx} ${cy + r + 1}L${cx - r - 1} ${cy}z`;
+  return `M${cx - r} ${cy}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0`;
+};
+const uid = `lc-${titulo.replace(/\W+/g, '').slice(0, 14).toLowerCase()}`;
+---
+
+<figure class="chart">
+  <h3 id={`${uid}-t`}>{titulo}</h3>
+  {subtitulo && <p class="sub">{subtitulo}</p>}
+  <div class="svg-scroll" tabindex="0" role="group" aria-label={`Gráfica: ${titulo}`}>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${uid}-t ${uid}-d`}>
+    <desc id={`${uid}-d`}>{desc}</desc>
+    {ticks.map((t) => (
+      <g>
+        <line class={t === 0 ? 'zero-line' : 'grid-line'} x1={m.l} x2={W - m.r} y1={y(t)} y2={y(t)} />
+        <text x={m.l - 8} y={y(t) + 4} text-anchor="end">{fmt(t)}</text>
+      </g>
+    ))}
+    {labels.map((l, i) => (
+      <text x={x(i)} y={H - m.b + 20} text-anchor="middle">{l}</text>
+    ))}
+    {series.map((s) => (
+      <g>
+        <path d={pathOf(s)} fill="none" stroke={s.color} stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round" stroke-dasharray={s.dash} />
+        {s.values.map((v, i) => v != null && (
+          <path d={marker(s, x(i), y(v))} fill={s.color} stroke="var(--surface)" stroke-width="1.5">
+            <title>{`${s.name}, ${labels[i]}: ${fmt(v)}${unidad}`}</title>
+          </path>
+        ))}
+      </g>
+    ))}
+  </svg>
+  </div>
+  <ul class="legend">
+    {series.map((s) => (
+      <li>
+        <svg viewBox="0 0 26 12" aria-hidden="true">
+          <line x1="0" x2="26" y1="6" y2="6" stroke={s.color} stroke-width="2.6" stroke-dasharray={s.dash} />
+          <path d={marker(s, 13, 6)} fill={s.color} />
+        </svg>
+        {s.name}
+      </li>
+    ))}
+  </ul>
+</figure>

@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Tabla from '../components/Tabla.astro';
+import Interpretacion from '../components/Interpretacion.astro';
+import Pager from '../components/Pager.astro';
+import Foto from '../components/Foto.astro';
+import { fotos } from '../data/fotos';
+
+const semaforo = [
+  { ind: 'Crecimiento real promedio del PIB, 2016-2025', bol: '2,8 %', col: '2,5 %', ok: true, texto: 'Ligeramente mejor' },
+  { ind: 'Crecimiento real del PIB en 2025 (pr)', bol: '2,0 %', col: '2,6 %', ok: false, texto: 'Peor' },
+  { ind: 'PIB por habitante, 2025 (pr)', bol: '29,7 millones', col: '34,9 millones', ok: false, texto: 'Peor (85 % del nacional)' },
+  { ind: 'Participación en el PIB nacional, 2025', bol: '3,59 %', col: '—', ok: true, texto: 'Séptima economía del país' },
+  { ind: 'Inflación, 2025', bol: '4,80 % (Cartagena)', col: '5,10 %', ok: true, texto: 'Mejor' },
+  { ind: 'Desempleo, 2025', bol: '9,4 %', col: '8,9 %', ok: false, texto: 'Peor' },
+  { ind: 'Informalidad, 2025', bol: '49,6 % (Cartagena)', col: '55,7 %', ok: true, texto: 'Mejor que el total nacional, peor que las 13 ciudades (42,2 %)' },
+  { ind: 'Pobreza monetaria, 2025', bol: '44,8 %', col: '28,0 %', ok: false, texto: 'Peor' },
+  { ind: 'Pobreza multidimensional, 2025', bol: '17,0 %', col: '9,9 %', ok: false, texto: 'Peor, y creció en 2025' },
+  { ind: 'Necesidades básicas insatisfechas, 2018', bol: '26,7 %', col: '14,3 %', ok: false, texto: 'Peor' },
+  { ind: 'Alcantarillado, 2018', bol: '50,9 %', col: '76,6 %', ok: false, texto: 'Peor (Cartagena: 86,8 %)' },
+];
+---
+
+<BaseLayout
+  title="Diagnóstico"
+  path="/diagnostico"
+  description="Diagnóstico de Bolívar: fortalezas, problemas, sectores con potencial, balance frente a Colombia, oportunidades de inversión y estrategias."
+>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="kicker">3. Diagnóstico</p>
+      <h1>Diagnóstico económico general</h1>
+      <p class="lead">Una economía grande y diversa en la costa, con carencias sociales y de empleo que no se corrigen solo con crecimiento.</p>
+      <ul class="toc">
+        <li><a href="#fortalezas">Fortalezas</a></li>
+        <li><a href="#problemas">Problemas</a></li>
+        <li><a href="#potencial">Sectores con potencial</a></li>
+        <li><a href="#comparacion">Frente al promedio nacional</a></li>
+        <li><a href="#inversion">Oportunidades de inversión</a></li>
+        <li><a href="#estrategias">Estrategias</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="section" id="fortalezas">
+    <div class="wrap split">
+      <div>
+        <h2>¿Cuáles son las principales fortalezas económicas?</h2>
+        <ul>
+          <li><strong>Tamaño y peso nacional estable.</strong> Es la séptima economía del país y la segunda del Caribe, con 3,6 % del PIB colombiano durante toda la década.</li>
+          <li><strong>Cartagena como nodo.</strong> Puerto, industria de refinación y petroquímica, turismo y patrimonio (Patrimonio de la Humanidad desde 1984) concentran inversión y generan la mayor parte del valor agregado.</li>
+          <li><strong>Posición geográfica.</strong> Acceso al mar Caribe, al río Magdalena y al canal del Dique conecta el interior del país con el comercio exterior.</li>
+          <li><strong>Agricultura dinámica.</strong> La producción agrícola real creció 44 % entre 2016 y 2025, la más alta entre las ramas principales.</li>
+          <li><strong>Resiliencia posterior a la pandemia.</strong> Tras caer 10,5 % en 2020, el PIB real de 2021 superó en 2,3 % al de 2019.</li>
+          <li><strong>Formalización en la capital.</strong> La informalidad en Cartagena bajó de 62,0 % a 49,6 % entre 2021 y 2025, por debajo del total nacional.</li>
+          <li><strong>Aseguramiento en salud</strong> casi igual al nacional (93,7 %).</li>
+        </ul>
+      </div>
+      <Foto foto={fotos.murallas} sizes="(min-width: 72rem) 34rem, 100vw" width={1100} />
+    </div>
+  </section>
+
+  <section class="section alt" id="problemas">
+    <div class="wrap">
+      <h2>¿Cuáles son los principales problemas sociales y económicos?</h2>
+      <div class="grid grid-2">
+        <div class="card">
+          <h3>Sociales</h3>
+          <ul>
+            <li>Pobreza monetaria de 44,8 % y extrema de 15,7 %, entre 1,6 y 1,7 veces la nacional.</li>
+            <li>Pobreza multidimensional de 17,0 %, que subió en 2025 mientras bajaba en el país.</li>
+            <li>26,7 % de las personas con necesidades básicas insatisfechas (2018), casi el doble del promedio nacional.</li>
+            <li>Solo 50,9 % de las viviendas con alcantarillado (2018).</li>
+            <li>Desigualdad interna: Cartagena tiene acueducto de 93,7 % y alcantarillado de 86,8 %, muy por encima del resto del departamento.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Económicos</h3>
+          <ul>
+            <li>Estancamiento desde 2023 (0,6 %, 0,3 % y 2,0 %), por debajo del crecimiento nacional.</li>
+            <li>PIB por habitante equivalente a 85 % del nacional.</li>
+            <li>Desempleo mayor que el nacional en 2024 y 2025, y TGP baja.</li>
+            <li>Informalidad cercana a 50 % en Cartagena y más alta en el resto del departamento.</li>
+            <li>Construcción (−21,5 %) y minería (−26,2 %) con menor volumen real que en 2016.</li>
+            <li>Economía concentrada en pocos sectores y en una sola ciudad.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="potencial">
+    <div class="wrap">
+      <h2>¿Qué sectores tienen mayor potencial de crecimiento?</h2>
+      <p>Los sectores con potencial son aquellos que ya muestran dinamismo real o que aprovechan una ventaja que el departamento tiene y otros no. Es un juicio apoyado en las cifras, no una proyección.</p>
+      <div class="grid grid-3">
+        <div class="card"><h3>Turismo y servicios</h3><p>Comercio, alojamiento y comida ya son la primera rama (20,4 % del valor agregado). Hay espacio para ampliar la oferta fuera de Cartagena (Mompox, Palenque, las islas) y alargar la estadía.</p></div>
+        <div class="card"><h3>Logística y puerto</h3><p>El puerto y las zonas francas de Cartagena conectan Colombia con el Caribe y los mercados internacionales. El transporte emplea a 11,4 % de los ocupados.</p></div>
+        <div class="card"><h3>Agroindustria</h3><p>La agricultura creció 44 % en términos reales. Con riego, vías y transformación local, la agricultura de los Montes de María, la Mojana y el sur puede agregar más valor.</p></div>
+        <div class="card"><h3>Industria y energía</h3><p>La industria manufacturera aporta 16,4 % del valor agregado y se concentra en Mamonal. La transición energética abre oportunidades en gas, energías renovables e hidrógeno, aprovechando la infraestructura existente.</p></div>
+        <div class="card"><h3>Construcción y vivienda</h3><p>Es la rama que más cayó, pero la demanda de vivienda e infraestructura de agua y saneamiento es grande, y su recuperación generaría empleo.</p></div>
+        <div class="card"><h3>Servicios digitales y creativos</h3><p>Información y comunicaciones pesa solo 1,6 % del valor agregado: hay una brecha grande para economía digital, cultura y servicios de apoyo a empresas.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="comparacion">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>¿Cómo se encuentra el departamento frente al promedio nacional?</h2>
+      </div>
+      <Tabla
+        id="tabla-resumen"
+        izquierda
+        numero="8"
+        titulo="Balance de indicadores: Bolívar frente a Colombia"
+        caption="Resumen de indicadores económicos y sociales de Bolívar y Colombia, con una valoración de la situación relativa"
+        fuente="Elaboración propia con las tablas 1 a 7 de este sitio (DANE y fuentes citadas en cada una)."
+        nota="Cada fila usa su propio año y su propio dominio geográfico. «Mejor» significa mejor que el total nacional en el indicador."
+      >
+        <thead>
+          <tr><th scope="col">Indicador</th><th scope="col">Bolívar</th><th scope="col">Colombia</th><th scope="col">Situación</th></tr>
+        </thead>
+        <tbody>
+          {semaforo.map((s) => (
+            <tr>
+              <th scope="row">{s.ind}</th>
+              <td class="bol">{s.bol}</td>
+              <td class="col">{s.col}</td>
+              <td class:list={['l', s.ok ? 'pos' : 'neg']}>{s.texto}</td>
+            </tr>
+          ))}
+        </tbody>
+      </Tabla>
+      <Interpretacion>
+        <p>El balance es claro: Bolívar está mejor que el país en los indicadores de tamaño y precios, y peor en los de bienestar. De los once indicadores, cuatro son favorables (crecimiento promedio, peso en el PIB, inflación e informalidad frente al total nacional) y todos los sociales y de ingreso son desfavorables. Bolívar es grande, pero no más próspero.</p>
+      </Interpretacion>
+    </div>
+  </section>
+
+  <section class="section" id="inversion">
+    <div class="wrap split">
+      <div>
+        <h2>¿Qué oportunidades de inversión y desarrollo presenta?</h2>
+        <ul>
+          <li><strong>Infraestructura portuaria y logística</strong> alrededor de Cartagena y del río Magdalena (Magangué como puerto fluvial).</li>
+          <li><strong>Turismo sostenible y de patrimonio</strong>, con infraestructura hotelera y de servicios en los destinos menos desarrollados.</li>
+          <li><strong>Agua potable y saneamiento básico</strong>, donde la brecha social es mayor y el retorno en bienestar es alto.</li>
+          <li><strong>Agroindustria y riego</strong> en los distritos de adecuación de tierras, como el de María la Baja.</li>
+          <li><strong>Energía y transición</strong>, aprovechando el sistema portuario y petroquímico de Mamonal.</li>
+          <li><strong>Vivienda y servicios urbanos</strong> en el área de influencia de Cartagena (Turbaco, Arjona, Turbana).</li>
+          <li><strong>Educación técnica y conectividad digital</strong> para cerrar brechas de capital humano.</li>
+        </ul>
+        <div class="note"><p>El Plan de Desarrollo Departamental 2024-2027, «Bolívar me enamora», aprobado por la Asamblea en mayo de 2024, organiza la inversión pública en cinco líneas estratégicas, con un presupuesto cercano a 7,2 billones de pesos.</p></div>
+      </div>
+      <Foto foto={fotos.playaBlanca} sizes="(min-width: 72rem) 34rem, 100vw" width={1100} />
+    </div>
+  </section>
+
+  <section class="section alt" id="estrategias">
+    <div class="wrap-narrow">
+      <h2>¿Qué estrategias podrían mejorar el crecimiento y el bienestar?</h2>
+      <ol>
+        <li><strong>Cerrar las brechas de agua y saneamiento</strong> en los municipios, priorizando los de mayor NBI. Reduce la pobreza multidimensional y mejora la salud.</li>
+        <li><strong>Diversificar la economía</strong> más allá de Cartagena, con agroindustria, turismo regional y logística fluvial que lleven empleo a los demás municipios.</li>
+        <li><strong>Formalizar el empleo</strong> con simplificación de trámites, protección social para independientes y programas por sector (turismo, comercio y transporte).</li>
+        <li><strong>Elevar el capital humano:</strong> más cobertura media y técnica ligada a las necesidades de puerto, industria y turismo.</li>
+        <li><strong>Reactivar la construcción y la inversión</strong> con proyectos de vivienda y de infraestructura social.</li>
+        <li><strong>Conectar los territorios:</strong> vías secundarias y terciarias, transporte fluvial y conectividad digital.</li>
+        <li><strong>Fortalecer la medición:</strong> estadísticas departamentales y municipales oportunas para dirigir la política.</li>
+      </ol>
+      <p>Estas estrategias tienen una lógica común: el crecimiento por sí solo no basta. Entre 2016 y 2025 el PIB real aumentó 24,5 % y, sin embargo, la pobreza sigue en 44,8 %. Se necesita que el crecimiento llegue a más sectores, a más municipios y a más personas.</p>
+    </div>
+  </section>
+
+  <div class="wrap"><Pager path="/diagnostico" /></div>
+</BaseLayout>

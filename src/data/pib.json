@@ -1,0 +1,228 @@
+{
+ "serie": [
+  {
+   "year": 2016,
+   "label": "2016",
+   "pibBol": 30917.9,
+   "pibCol": 863782,
+   "share": 3.58,
+   "growthBol": 4.2,
+   "growthCol": 2.1,
+   "volBol": 29284.7,
+   "volCol": 821489
+  },
+  {
+   "year": 2017,
+   "label": "2017",
+   "pibBol": 33393.8,
+   "pibCol": 920471,
+   "share": 3.63,
+   "growthBol": 3.4,
+   "growthCol": 1.4,
+   "volBol": 30271.2,
+   "volCol": 832656
+  },
+  {
+   "year": 2018,
+   "label": "2018",
+   "pibBol": 35410.3,
+   "pibCol": 987791,
+   "share": 3.58,
+   "growthBol": 1.8,
+   "growthCol": 2.6,
+   "volBol": 30804.1,
+   "volCol": 854008
+  },
+  {
+   "year": 2019,
+   "label": "2019",
+   "pibBol": 38285.3,
+   "pibCol": 1060068,
+   "share": 3.61,
+   "growthBol": 3.6,
+   "growthCol": 3.2,
+   "volBol": 31919.8,
+   "volCol": 881224
+  },
+  {
+   "year": 2020,
+   "label": "2020",
+   "pibBol": 34626,
+   "pibCol": 998471,
+   "share": 3.47,
+   "growthBol": -10.5,
+   "growthCol": -7.2,
+   "volBol": 28575.6,
+   "volCol": 817900
+  },
+  {
+   "year": 2021,
+   "label": "2021",
+   "pibBol": 42169.9,
+   "pibCol": 1192634,
+   "share": 3.54,
+   "growthBol": 14.3,
+   "growthCol": 10.8,
+   "volBol": 32660.6,
+   "volCol": 906243
+  },
+  {
+   "year": 2022,
+   "label": "2022",
+   "pibBol": 51341,
+   "pibCol": 1471079,
+   "share": 3.49,
+   "growthBol": 8.5,
+   "growthCol": 7.3,
+   "volBol": 35424.4,
+   "volCol": 972655
+  },
+  {
+   "year": 2023,
+   "label": "2023",
+   "pibBol": 56717.1,
+   "pibCol": 1587200,
+   "share": 3.57,
+   "growthBol": 0.6,
+   "growthCol": 0.8,
+   "volBol": 35626.4,
+   "volCol": 980843
+  },
+  {
+   "year": 2024,
+   "label": "2024 (p)",
+   "pibBol": 61690.6,
+   "pibCol": 1713316,
+   "share": 3.6,
+   "growthBol": 0.3,
+   "growthCol": 1.5,
+   "volBol": 35734.3,
+   "volCol": 995490
+  },
+  {
+   "year": 2025,
+   "label": "2025 (pr)",
+   "pibBol": 66546.9,
+   "pibCol": 1852670,
+   "share": 3.59,
+   "growthBol": 2,
+   "growthCol": 2.6,
+   "volBol": 36462.1,
+   "volCol": 1021072.9
+  }
+ ],
+ "meta": {
+  "fuente": "DANE, Cuentas nacionales departamentales, anexo PIB por departamento (base 2015), actualizado el 3 de julio de 2026",
+  "rankBolivar2025": 7,
+  "ranking2025": [
+   {
+    "name": "Bogotá D.C.",
+    "pib": 471209.1,
+    "share": 25.43
+   },
+   {
+    "name": "Antioquia",
+    "pib": 277082.3,
+    "share": 14.96
+   },
+   {
+    "name": "Valle del Cauca",
+    "pib": 180903.4,
+    "share": 9.76
+   },
+   {
+    "name": "Santander",
+    "pib": 119031.9,
+    "share": 6.42
+   },
+   {
+    "name": "Cundinamarca",
+    "pib": 117005.2,
+    "share": 6.32
+   },
+   {
+    "name": "Atlántico",
+    "pib": 82325.9,
+    "share": 4.44
+   },
+   {
+    "name": "Bolívar",
+    "pib": 66546.9,
+    "share": 3.59
+   },
+   {
+    "name": "Meta",
+    "pib": 55914,
+    "share": 3.02
+   },
+   {
+    "name": "Boyacá",
+    "pib": 48822.8,
+    "share": 2.64
+   },
+   {
+    "name": "Tolima",
+    "pib": 40975.2,
+    "share": 2.21
+   }
+  ],
+  "caribe2025": [
+   {
+    "name": "Atlántico",
+    "share": 30.06
+   },
+   {
+    "name": "Bolívar",
+    "share": 24.3
+   },
+   {
+    "name": "Córdoba",
+    "share": 12.28
+   },
+   {
+    "name": "Cesar",
+    "share": 11.51
+   },
+   {
+    "name": "Magdalena",
+    "share": 9.81
+   },
+   {
+    "name": "La Guajira",
+    "share": 6.48
+   },
+   {
+    "name": "Sucre",
+    "share": 5.56
+   }
+  ],
+  "perCapita2025": {
+   "bolivar": 29691467,
+   "colombia": 34918345
+  },
+  "perCapitaRatio": 85,
+  "realTotalGrowth": {
+   "bolivar": 24.5,
+   "colombia": 24.3
+  },
+  "promedioCrecimiento": {
+   "bolivar": 2.8,
+   "colombia": 2.5
+  },
+  "promedioParticipacion": 3.57,
+  "añosPorEncima": [
+   2016,
+   2017,
+   2019,
+   2021,
+   2022
+  ],
+  "añosPorDebajo": [
+   2018,
+   2020,
+   2023,
+   2024,
+   2025
+  ]
+ }
+}

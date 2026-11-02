@@ -1,0 +1,495 @@
+{
+ "fuente": "DANE, Cuentas nacionales departamentales, anexo Resultados por actividad económica (base 2015), actualizado el 3 de julio de 2026",
+ "valorAgregado2025": 59170.5,
+ "impuestos2025": 7376.4,
+ "pib2025": 66546.9,
+ "realValorAgregado": {
+  "bolivar": 22.8,
+  "colombia": 23
+ },
+ "grupos": [
+  {
+   "label": "Agricultura, ganadería, pesca y silvicultura",
+   "componentes": [
+    "Agricultura, ganadería, caza, silvicultura y pesca"
+   ],
+   "valor2025": 4383.8,
+   "share2025": 7.4,
+   "shareCol2025": 11,
+   "share2016": 5,
+   "shareCol2016": 7.2,
+   "share2020": 5.8,
+   "realBol": 44,
+   "realCol": 29.2
+  },
+  {
+   "label": "Explotación de minas y canteras",
+   "componentes": [
+    "Explotación de minas y canteras"
+   ],
+   "valor2025": 1314.7,
+   "share2025": 2.2,
+   "shareCol2025": 4.1,
+   "share2016": 2.6,
+   "shareCol2016": 5.2,
+   "share2020": 2.9,
+   "realBol": -26.2,
+   "realCol": -24.9
+  },
+  {
+   "label": "Industrias manufactureras",
+   "componentes": [
+    "Industrias manufactureras"
+   ],
+   "valor2025": 9674.5,
+   "share2025": 16.4,
+   "shareCol2025": 11,
+   "share2016": 17,
+   "shareCol2016": 13.5,
+   "share2020": 16.9,
+   "realBol": 17.4,
+   "realCol": 9.8
+  },
+  {
+   "label": "Construcción",
+   "componentes": [
+    "Construcción"
+   ],
+   "valor2025": 5570.6,
+   "share2025": 9.4,
+   "shareCol2025": 4.7,
+   "share2016": 12.7,
+   "shareCol2016": 8.2,
+   "share2020": 9,
+   "realBol": -21.5,
+   "realCol": -31.3
+  },
+  {
+   "label": "Comercio, transporte, alojamiento y comidas",
+   "componentes": [
+    "Comercio, transporte, alojamiento y servicios de comida"
+   ],
+   "valor2025": 12052.3,
+   "share2025": 20.4,
+   "shareCol2025": 21.1,
+   "share2016": 19.6,
+   "shareCol2016": 19.4,
+   "share2020": 16.5,
+   "realBol": 25.8,
+   "realCol": 28.8
+  },
+  {
+   "label": "Información y comunicaciones",
+   "componentes": [
+    "Información y comunicaciones"
+   ],
+   "valor2025": 959.8,
+   "share2025": 1.6,
+   "shareCol2025": 2.4,
+   "share2016": 2.2,
+   "shareCol2016": 3.2,
+   "share2020": 2.3,
+   "realBol": 31.1,
+   "realCol": 31.4
+  },
+  {
+   "label": "Actividades financieras e inmobiliarias",
+   "componentes": [
+    "Actividades financieras y de seguros",
+    "Actividades inmobiliarias"
+   ],
+   "valor2025": 4858.6,
+   "share2025": 8.2,
+   "shareCol2025": 12.9,
+   "share2016": 9.5,
+   "shareCol2016": 14,
+   "share2020": 10.9,
+   "realBol": null,
+   "realCol": null
+  },
+  {
+   "label": "Administración pública, educación y salud",
+   "componentes": [
+    "Administración pública, educación y salud"
+   ],
+   "valor2025": 11849.9,
+   "share2025": 20,
+   "shareCol2025": 17,
+   "share2016": 18.9,
+   "shareCol2016": 15.7,
+   "share2020": 21.9,
+   "realBol": 43.2,
+   "realCol": 42.3
+  },
+  {
+   "label": "Otras actividades",
+   "componentes": [
+    "Electricidad, gas y agua; gestión de desechos",
+    "Actividades profesionales y servicios administrativos",
+    "Actividades artísticas, de entretenimiento y otros servicios"
+   ],
+   "valor2025": 8506.3,
+   "share2025": 14.4,
+   "shareCol2025": 15.8,
+   "share2016": 12.6,
+   "shareCol2016": 13.7,
+   "share2020": 13.8,
+   "realBol": null,
+   "realCol": null
+  }
+ ],
+ "detalle": [
+  {
+   "key": "agro",
+   "label": "Agricultura, ganadería, caza, silvicultura y pesca",
+   "valor2025": 4383.8,
+   "share2025": 7.4,
+   "share2016": 5,
+   "shareCol2025": 11,
+   "realBol": 44,
+   "realCol": 29.2
+  },
+  {
+   "key": "minas",
+   "label": "Explotación de minas y canteras",
+   "valor2025": 1314.7,
+   "share2025": 2.2,
+   "share2016": 2.6,
+   "shareCol2025": 4.1,
+   "realBol": -26.2,
+   "realCol": -24.9
+  },
+  {
+   "key": "industria",
+   "label": "Industrias manufactureras",
+   "valor2025": 9674.5,
+   "share2025": 16.4,
+   "share2016": 17,
+   "shareCol2025": 11,
+   "realBol": 17.4,
+   "realCol": 9.8
+  },
+  {
+   "key": "electricidad",
+   "label": "Electricidad, gas y agua; gestión de desechos",
+   "valor2025": 2419.2,
+   "share2025": 4.1,
+   "share2016": 3.4,
+   "shareCol2025": 4.4,
+   "realBol": 20.3,
+   "realCol": 23.2
+  },
+  {
+   "key": "construccion",
+   "label": "Construcción",
+   "valor2025": 5570.6,
+   "share2025": 9.4,
+   "share2016": 12.7,
+   "shareCol2025": 4.7,
+   "realBol": -21.5,
+   "realCol": -31.3
+  },
+  {
+   "key": "comercio",
+   "label": "Comercio, transporte, alojamiento y servicios de comida",
+   "valor2025": 12052.3,
+   "share2025": 20.4,
+   "share2016": 19.6,
+   "shareCol2025": 21.1,
+   "realBol": 25.8,
+   "realCol": 28.8
+  },
+  {
+   "key": "info",
+   "label": "Información y comunicaciones",
+   "valor2025": 959.8,
+   "share2025": 1.6,
+   "share2016": 2.2,
+   "shareCol2025": 2.4,
+   "realBol": 31.1,
+   "realCol": 31.4
+  },
+  {
+   "key": "financieras",
+   "label": "Actividades financieras y de seguros",
+   "valor2025": 1404.8,
+   "share2025": 2.4,
+   "share2016": 2.4,
+   "shareCol2025": 4.7,
+   "realBol": 44.4,
+   "realCol": 48.7
+  },
+  {
+   "key": "inmobiliarias",
+   "label": "Actividades inmobiliarias",
+   "valor2025": 3453.8,
+   "share2025": 5.8,
+   "share2016": 7.1,
+   "shareCol2025": 8.2,
+   "realBol": 22.3,
+   "realCol": 24.6
+  },
+  {
+   "key": "profesionales",
+   "label": "Actividades profesionales y servicios administrativos",
+   "valor2025": 4337.4,
+   "share2025": 7.3,
+   "share2016": 7.5,
+   "shareCol2025": 6.9,
+   "realBol": 30.9,
+   "realCol": 25.1
+  },
+  {
+   "key": "admin",
+   "label": "Administración pública, educación y salud",
+   "valor2025": 11849.9,
+   "share2025": 20,
+   "share2016": 18.9,
+   "shareCol2025": 17,
+   "realBol": 43.2,
+   "realCol": 42.3
+  },
+  {
+   "key": "otrosServ",
+   "label": "Actividades artísticas, de entretenimiento y otros servicios",
+   "valor2025": 1749.7,
+   "share2025": 3,
+   "share2016": 1.6,
+   "shareCol2025": 4.5,
+   "realBol": 146.8,
+   "realCol": 135.4
+  }
+ ],
+ "serieShares": [
+  {
+   "key": "agro",
+   "label": "Agricultura, ganadería, caza, silvicultura y pesca",
+   "puntos": [
+    {
+     "year": 2016,
+     "share": 5
+    },
+    {
+     "year": 2017,
+     "share": 4.7
+    },
+    {
+     "year": 2018,
+     "share": 4.7
+    },
+    {
+     "year": 2019,
+     "share": 4.7
+    },
+    {
+     "year": 2020,
+     "share": 5.8
+    },
+    {
+     "year": 2021,
+     "share": 5.9
+    },
+    {
+     "year": 2022,
+     "share": 6.9
+    },
+    {
+     "year": 2023,
+     "share": 6.7
+    },
+    {
+     "year": 2024,
+     "share": 7
+    },
+    {
+     "year": 2025,
+     "share": 7.4
+    }
+   ]
+  },
+  {
+   "key": "industria",
+   "label": "Industrias manufactureras",
+   "puntos": [
+    {
+     "year": 2016,
+     "share": 17
+    },
+    {
+     "year": 2017,
+     "share": 16.7
+    },
+    {
+     "year": 2018,
+     "share": 17.5
+    },
+    {
+     "year": 2019,
+     "share": 17.3
+    },
+    {
+     "year": 2020,
+     "share": 16.9
+    },
+    {
+     "year": 2021,
+     "share": 19.3
+    },
+    {
+     "year": 2022,
+     "share": 19.4
+    },
+    {
+     "year": 2023,
+     "share": 18.8
+    },
+    {
+     "year": 2024,
+     "share": 17.5
+    },
+    {
+     "year": 2025,
+     "share": 16.4
+    }
+   ]
+  },
+  {
+   "key": "construccion",
+   "label": "Construcción",
+   "puntos": [
+    {
+     "year": 2016,
+     "share": 12.7
+    },
+    {
+     "year": 2017,
+     "share": 13.2
+    },
+    {
+     "year": 2018,
+     "share": 11.4
+    },
+    {
+     "year": 2019,
+     "share": 11.4
+    },
+    {
+     "year": 2020,
+     "share": 9
+    },
+    {
+     "year": 2021,
+     "share": 7.6
+    },
+    {
+     "year": 2022,
+     "share": 8.1
+    },
+    {
+     "year": 2023,
+     "share": 8.5
+    },
+    {
+     "year": 2024,
+     "share": 9.3
+    },
+    {
+     "year": 2025,
+     "share": 9.4
+    }
+   ]
+  },
+  {
+   "key": "comercio",
+   "label": "Comercio, transporte, alojamiento y servicios de comida",
+   "puntos": [
+    {
+     "year": 2016,
+     "share": 19.6
+    },
+    {
+     "year": 2017,
+     "share": 19.6
+    },
+    {
+     "year": 2018,
+     "share": 19.7
+    },
+    {
+     "year": 2019,
+     "share": 19.5
+    },
+    {
+     "year": 2020,
+     "share": 16.5
+    },
+    {
+     "year": 2021,
+     "share": 18.9
+    },
+    {
+     "year": 2022,
+     "share": 20.4
+    },
+    {
+     "year": 2023,
+     "share": 20.2
+    },
+    {
+     "year": 2024,
+     "share": 19.9
+    },
+    {
+     "year": 2025,
+     "share": 20.4
+    }
+   ]
+  },
+  {
+   "key": "admin",
+   "label": "Administración pública, educación y salud",
+   "puntos": [
+    {
+     "year": 2016,
+     "share": 18.9
+    },
+    {
+     "year": 2017,
+     "share": 19
+    },
+    {
+     "year": 2018,
+     "share": 19.3
+    },
+    {
+     "year": 2019,
+     "share": 19.4
+    },
+    {
+     "year": 2020,
+     "share": 21.9
+    },
+    {
+     "year": 2021,
+     "share": 20
+    },
+    {
+     "year": 2022,
+     "share": 18
+    },
+    {
+     "year": 2023,
+     "share": 18.7
+    },
+    {
+     "year": 2024,
+     "share": 19.5
+    },
+    {
+     "year": 2025,
+     "share": 20
+    }
+   ]
+  }
+ ]
+}

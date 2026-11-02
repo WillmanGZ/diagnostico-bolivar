@@ -1,0 +1,202 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Tabla from '../components/Tabla.astro';
+import Interpretacion from '../components/Interpretacion.astro';
+import LineChart from '../components/LineChart.astro';
+import ColumnChart from '../components/ColumnChart.astro';
+import Pager from '../components/Pager.astro';
+import Foto from '../components/Foto.astro';
+import data from '../data/inflacion.json';
+import { fotos } from '../data/fotos';
+import { n1, n2, sgn } from '../lib/format';
+
+const s = data.serie;
+const acumulado = (k: 'cartagena' | 'colombia') => (s.reduce((a, p) => a * (1 + p[k] / 100), 1) - 1) * 100;
+const acCar = acumulado('cartagena');
+const acCol = acumulado('colombia');
+const arriba = s.filter((p) => p.dif > 0).map((p) => p.year);
+const abajo = s.filter((p) => p.dif < 0).map((p) => p.year);
+const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
+const grupos = [
+  { grupo: 'Transporte', v: 9.47 },
+  { grupo: 'Educación', v: 9.19 },
+  { grupo: 'Restaurantes y hoteles', v: 8.39 },
+  { grupo: 'Salud', v: 7.98 },
+];
+---
+
+<BaseLayout
+  title="Inflación"
+  path="/inflacion"
+  description="Inflación de Cartagena frente a la nacional, 2017-2025: IPC anual, años de mayor y menor alza, diferencia en puntos y grupos de gasto."
+>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="kicker">2.2 Variables económicas</p>
+      <h1>Inflación</h1>
+      <p class="lead">Los precios en Cartagena se movieron casi al mismo ritmo que en el país: acumulan {n1(acCar)} % entre 2017 y 2025, frente a {n1(acCol)} % en Colombia.</p>
+      <ul class="toc">
+        <li><a href="#tabla-5">Tabla 5</a></li>
+        <li><a href="#graficas">Gráficas</a></li>
+        <li><a href="#grupos">Grupos de gasto</a></li>
+        <li><a href="#analisis">Análisis</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="note">
+        <p><strong>Dominio geográfico.</strong> El DANE publica el Índice de Precios al Consumidor (IPC) para determinadas ciudades y áreas urbanas, no para cada departamento. Por eso se usa la inflación de <strong>Cartagena de Indias</strong>, la capital, como referencia de Bolívar, y se compara con el <strong>total nacional</strong>. Se presenta la variación del IPC de diciembre a diciembre (año corrido a diciembre).</p>
+      </div>
+
+      <Tabla
+        id="tabla-5"
+        numero="5"
+        titulo="Comportamiento de la inflación, 2017-2025"
+        caption="Variación anual del IPC en Cartagena y en Colombia, y diferencia en puntos porcentuales"
+        fuente="DANE, IPC variaciones mensuales por ciudades, serie 2017-2026 (archivo «IPC ciudades», actualizado el 7 de octubre de 2026)."
+        nota="Variación porcentual año corrido a diciembre. Diferencia = Cartagena − Colombia, en puntos porcentuales (pp). El archivo del docente cubre 2017-2025 (nueve años completos); 2026 está incompleto y no se incluye. Los promedios son aritméticos simples."
+      >
+        <thead>
+          <tr>
+            <th scope="col">Año</th>
+            <th scope="col">Inflación de la capital, Cartagena (%)</th>
+            <th scope="col">Inflación Colombia (%)</th>
+            <th scope="col">Diferencia (pp)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {s.map((p) => (
+            <tr>
+              <th scope="row">{p.year}</th>
+              <td class="bol">{n2(p.cartagena)}</td>
+              <td class="col">{n2(p.colombia)}</td>
+              <td class:list={[p.dif > 0 ? 'neg' : 'pos']}>{sgn(p.dif, 2)}</td>
+            </tr>
+          ))}
+          <tr class="total">
+            <th scope="row">Promedio simple</th>
+            <td>{n2(data.promedio.cartagena)}</td>
+            <td>{n2(data.promedio.colombia)}</td>
+            <td>{sgn(data.promedio.cartagena - data.promedio.colombia, 2)}</td>
+          </tr>
+          <tr class="total">
+            <th scope="row">Acumulada 2017-2025</th>
+            <td>{n1(acCar)}</td>
+            <td>{n1(acCol)}</td>
+            <td>{sgn(acCar - acCol)}</td>
+          </tr>
+        </tbody>
+      </Tabla>
+      <p class="source">En la columna de diferencia, el verde indica que los precios de Cartagena subieron menos que los nacionales y el rojo, que subieron más.</p>
+
+      <Interpretacion>
+        <p>La inflación tuvo tres momentos. Entre 2017 y 2019 se movió en un rango estable de 3 % a 4 %. En 2020 cayó a {n2(s[3].cartagena)} % en Cartagena ({n2(s[3].colombia)} % en Colombia), el mínimo del periodo, por la caída de la demanda durante la pandemia. Desde 2021 se aceleró hasta el máximo de 2022 ({n2(s[5].cartagena)} % en Cartagena y {n2(s[5].colombia)} % en el país), y luego bajó a {n2(s[6].cartagena)} % en 2023 y a cerca de 5 % en 2024 y 2025, todavía por encima del rango anterior a la pandemia.</p>
+        <p>Cartagena tuvo mayor inflación que el país en {arriba.join(', ')} y menor en {abajo.join(', ')}. La brecha más amplia fue la de 2022 ({sgn(s[5].dif, 2)} pp): el choque de precios golpeó más a la ciudad. En promedio los dos indicadores son casi iguales ({n2(data.promedio.cartagena)} % frente a {n2(data.promedio.colombia)} %).</p>
+      </Interpretacion>
+    </div>
+  </section>
+
+  <section class="section alt" id="graficas">
+    <div class="wrap">
+      <LineChart
+        titulo="Inflación anual: Cartagena y Colombia"
+        subtitulo="Variación porcentual del IPC, diciembre a diciembre"
+        desc="Inflación anual de Cartagena y de Colombia entre 2017 y 2025. Ambas se mueven juntas: estables entre 3 y 4 por ciento hasta 2019, mínimo en 2020, máximo en 2022 con 14,3 por ciento en Cartagena y 13,1 en Colombia, y descenso posterior hasta cerca de 5 por ciento."
+        labels={s.map((p) => String(p.year))}
+        series={[
+          { name: 'Cartagena (capital)', color: 'var(--bol)', values: s.map((p) => p.cartagena), marker: 'circle' },
+          { name: 'Colombia', color: 'var(--col)', values: s.map((p) => p.colombia), marker: 'square', dash: '6 4' },
+        ]}
+      />
+      <div>
+        <ColumnChart
+          titulo="Diferencia entre Cartagena y Colombia"
+          subtitulo="Puntos porcentuales (Cartagena − Colombia)"
+          desc="Diferencia en puntos porcentuales entre la inflación de Cartagena y la nacional. Positiva en 2018, 2019, 2021, 2022 y 2023, con el máximo de 1,21 puntos en 2022, y negativa en 2017, 2020, 2024 y 2025."
+          labels={s.map((p) => String(p.year))}
+          series={[{ name: 'Cartagena − Colombia (pp)', color: 'var(--bol)', values: s.map((p) => p.dif) }]}
+          decimales={2}
+          unidad=" pp"
+        />
+        <LineChart
+          titulo="Inflación mensual en 2022, el año más alto"
+          subtitulo="Variación mensual del IPC"
+          desc="Variación mensual del IPC en 2022. Cartagena supera a Colombia en la mayoría de los meses; el mayor aumento fue febrero con 1,68 por ciento en Cartagena."
+          labels={meses}
+          series={[
+            { name: 'Cartagena', color: 'var(--bol)', values: data.meses2022Cartagena, marker: 'circle' },
+            { name: 'Colombia', color: 'var(--col)', values: data.meses2022Colombia, marker: 'square', dash: '6 4' },
+          ]}
+          decimales={2}
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="grupos">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Grupos de gasto que presionaron los precios</h2>
+        <p>El archivo del DANE entregado trae el IPC total de cada ciudad; los grupos de gasto de 2025 se tomaron del análisis de Cartagena Cómo Vamos, que usa datos del DANE.</p>
+      </div>
+      <Tabla
+        id="tabla-5b"
+        numero="5b"
+        titulo="Grupos de gasto con mayor variación en Cartagena, 2025"
+        caption="Variación anual del IPC de Cartagena por grupo de gasto en 2025"
+        fuente="Cartagena Cómo Vamos, infografía de inflación 2025, con datos del DANE."
+        nota="Variación anual a diciembre de 2025. Cifras tomadas de un análisis de terceros; se recomienda contrastarlas con el comunicado de prensa del IPC de diciembre de 2025 del DANE."
+      >
+        <thead>
+          <tr><th scope="col">Grupo de gasto</th><th scope="col">Variación 2025 (%)</th><th scope="col">Frente al total de la ciudad (pp)</th></tr>
+        </thead>
+        <tbody>
+          {grupos.map((g) => (
+            <tr><th scope="row">{g.grupo}</th><td class="bol">{n2(g.v)}</td><td>{sgn(g.v - 4.8, 2)}</td></tr>
+          ))}
+          <tr class="total"><th scope="row">Total Cartagena</th><td>4,80</td><td>0,00</td></tr>
+        </tbody>
+      </Tabla>
+      <Interpretacion>
+        <p>En 2025 los cuatro grupos que más subieron (transporte, educación, restaurantes y hoteles, y salud) subieron entre 1,7 y 2 veces más que la inflación total de la ciudad. Tres de ellos son servicios: el aumento de precios en Cartagena viene sobre todo del costo de los servicios y de la actividad turística, más que de los bienes.</p>
+      </Interpretacion>
+    </div>
+  </section>
+
+  <section class="section alt" id="analisis">
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <h2>Análisis de la inflación</h2>
+      </div>
+
+      <h3>¿Cómo se comportó la inflación durante el periodo?</h3>
+      <p>Pasó de un régimen estable (3 % a 4 % entre 2017 y 2019) a una caída en 2020, un salto en 2021 y un máximo en 2022, y desde entonces ha ido bajando. El nivel de precios de Cartagena fue {n1(acCar)} % más alto en diciembre de 2025 que en diciembre de 2016, casi el mismo aumento que en el conjunto del país ({n1(acCol)} %).</p>
+
+      <h3>¿En qué años hubo los mayores aumentos de precios?</h3>
+      <p>En 2022 ({n2(s[5].cartagena)} % en Cartagena) y 2023 ({n2(s[6].cartagena)} %). Los menores fueron los de 2020 ({n2(s[3].cartagena)} %), cuando la economía estuvo cerrada, y los de 2017 y 2018 (cerca de 3 %). Las explicaciones habituales para 2021-2023 son el choque de costos de importación y de alimentos, la depreciación del peso y las rigideces de la oferta tras la pandemia; no se pueden comprobar solo con el IPC total.</p>
+
+      <h3>¿La inflación de la capital ha sido superior o inferior a la nacional?</h3>
+      <p>Las dos cosas, según el año. Fue superior en {arriba.join(', ')} e inferior en {abajo.join(', ')}. En conjunto es prácticamente igual: promedio de {n2(data.promedio.cartagena)} % frente a {n2(data.promedio.colombia)} %. Sin embargo, en los años de choque (2022 y 2023) Cartagena sufrió más, y en los dos últimos años (2024 y 2025) menos.</p>
+
+      <h3>¿Qué grupos de bienes y servicios tuvieron mayor incidencia?</h3>
+      <p>En 2025 lideraron el transporte ({n2(grupos[0].v)} %), la educación ({n2(grupos[1].v)} %), los restaurantes y hoteles ({n2(grupos[2].v)} %) y la salud ({n2(grupos[3].v)} %). Para los hogares con menores ingresos pesa además el rubro de alimentos, que concentra una porción mayor de su gasto; el archivo entregado no permite medir su incidencia por año.</p>
+
+      <h3>¿Cómo afecta la inflación a los hogares y a las empresas?</h3>
+      <p>Para los hogares, una inflación alta reduce el poder de compra, sobre todo en un departamento donde 44,8 % de las personas es pobre por ingresos y donde el empleo informal supera el 49 % en Cartagena: los ingresos informales rara vez se ajustan con los precios. Para las empresas, sube los costos de insumos, transporte y salarios, y las de turismo y servicios, que dominan la economía de Cartagena, enfrentan el dilema de trasladar el aumento al cliente o perder competitividad frente a otros destinos. La inflación alta también encarece el crédito, porque el Banco de la República sube sus tasas para controlarla, lo que frena la inversión y la construcción.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap grid grid-2">
+      <Foto foto={fotos.sectorAntiguo} sizes="(min-width: 72rem) 36rem, 100vw" width={1200} />
+      <div>
+        <h2>Un costo de vida ligado al turismo</h2>
+        <p>Buena parte de los precios de Cartagena depende de la actividad turística: hoteles, restaurantes, transporte urbano e intermunicipal. Cuando el turismo se recupera, esos servicios suben de precio y arrastran el índice general, lo que ayuda a entender por qué la ciudad supera al país en los años de recuperación (2021 a 2023) y queda por debajo cuando el choque pasa.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><Pager path="/inflacion" /></div>
+</BaseLayout>

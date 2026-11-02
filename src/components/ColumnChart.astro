@@ -1,0 +1,75 @@
+---
+interface Serie { name: string; color: string; values: (number | null)[] }
+interface Props {
+  titulo: string;
+  subtitulo?: string;
+  desc: string;
+  labels: string[];
+  series: Serie[];
+  unidad?: string;
+  decimales?: number;
+}
+const { titulo, subtitulo, desc, labels, series, unidad = '%', decimales = 1 } = Astro.props;
+
+const W = 640, H = 340, m = { t: 24, r: 16, b: 38, l: 50 };
+const all = series.flatMap((s) => s.values).filter((v): v is number => v != null);
+const rawMin = Math.min(0, ...all), rawMax = Math.max(0, ...all);
+const step = (() => {
+  const span = rawMax - rawMin || 1;
+  const pow = 10 ** Math.floor(Math.log10(span / 4));
+  const f = span / 4 / pow;
+  return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * pow;
+})();
+const yMin = Math.floor(rawMin / step) * step, yMax = Math.ceil(rawMax / step) * step;
+const ticks: number[] = [];
+for (let v = yMin; v <= yMax + step / 2; v += step) ticks.push(Math.round(v * 1000) / 1000);
+const y = (v: number) => m.t + ((yMax - v) * (H - m.t - m.b)) / (yMax - yMin);
+const groupW = (W - m.l - m.r) / labels.length;
+const barW = Math.min(26, (groupW - 12) / series.length);
+const fmt = (v: number) => new Intl.NumberFormat('es-CO', { minimumFractionDigits: decimales, maximumFractionDigits: decimales }).format(v);
+const uid = `cc-${titulo.replace(/\W+/g, '').slice(0, 14).toLowerCase()}`;
+---
+
+<figure class="chart">
+  <h3 id={`${uid}-t`}>{titulo}</h3>
+  {subtitulo && <p class="sub">{subtitulo}</p>}
+  <div class="svg-scroll" tabindex="0" role="group" aria-label={`Gráfica: ${titulo}`}>
+  <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby={`${uid}-t ${uid}-d`}>
+    <desc id={`${uid}-d`}>{desc}</desc>
+    {ticks.map((t) => (
+      <g>
+        <line class={t === 0 ? 'zero-line' : 'grid-line'} x1={m.l} x2={W - m.r} y1={y(t)} y2={y(t)} />
+        <text x={m.l - 8} y={y(t) + 4} text-anchor="end">{fmt(t)}</text>
+      </g>
+    ))}
+    {labels.map((l, gi) => {
+      const cx = m.l + groupW * gi + groupW / 2;
+      const x0 = cx - (barW * series.length) / 2;
+      return (
+        <g>
+          {series.map((s, si) => {
+            const v = s.values[gi];
+            if (v == null) return null;
+            const top = Math.min(y(v), y(0)), h = Math.abs(y(v) - y(0));
+            const bx = x0 + si * barW;
+            return (
+              <g>
+                <rect x={bx + 1} y={top} width={barW - 2} height={Math.max(h, 1)} fill={s.color} rx="2">
+                  <title>{`${s.name}, ${l}: ${fmt(v)}${unidad}`}</title>
+                </rect>
+                <text class="val" x={bx + barW / 2} y={v >= 0 ? top - 4 : top + h + 11} text-anchor="middle">{fmt(v)}</text>
+              </g>
+            );
+          })}
+          <text x={cx} y={H - m.b + 20} text-anchor="middle">{l}</text>
+        </g>
+      );
+    })}
+  </svg>
+  </div>
+  <ul class="legend">
+    {series.map((s) => (
+      <li><svg viewBox="0 0 14 12" aria-hidden="true"><rect width="14" height="12" rx="2" fill={s.color} /></svg>{s.name}</li>
+    ))}
+  </ul>
+</figure>

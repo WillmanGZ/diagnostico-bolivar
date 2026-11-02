@@ -1,0 +1,293 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Tabla from '../components/Tabla.astro';
+import Interpretacion from '../components/Interpretacion.astro';
+import ColumnChart from '../components/ColumnChart.astro';
+import LineChart from '../components/LineChart.astro';
+import Pager from '../components/Pager.astro';
+import Foto from '../components/Foto.astro';
+import pib from '../data/pib.json';
+import sectores from '../data/sectores.json';
+import { fotos } from '../data/fotos';
+import { n1, n2, sgn, billones } from '../lib/format';
+
+const s = pib.serie;
+const m = pib.meta;
+const prom = {
+  pibBol: s.reduce((a, p) => a + p.pibBol, 0) / s.length,
+  pibCol: s.reduce((a, p) => a + p.pibCol, 0) / s.length,
+};
+// Índice del PIB real (2016 = 100) para comparar trayectorias.
+const idx = (k: 'volBol' | 'volCol') => s.map((p) => Math.round((p[k] / s[0][k]) * 1000) / 10);
+const g = sectores.grupos;
+const top = [...g].sort((a, b) => b.share2025 - a.share2025);
+---
+
+<BaseLayout
+  title="Producto Interno Bruto"
+  path="/pib"
+  description="PIB de Bolívar 2016-2025: valores, crecimiento real, participación en el PIB nacional y estructura por actividad económica, frente a Colombia."
+>
+  <header class="page-head">
+    <div class="wrap">
+      <p class="kicker">2.1 Variables económicas</p>
+      <h1>Producto Interno Bruto</h1>
+      <p class="lead">Bolívar duplicó su PIB en pesos corrientes entre 2016 y 2025, pero en términos reales creció igual que el país: ganó tamaño sin ganar peso.</p>
+      <ul class="toc">
+        <li><a href="#evolucion">Evolución 2016-2025</a></li>
+        <li><a href="#estructura">Estructura sectorial</a></li>
+        <li><a href="#analisis">Análisis</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <section class="section" id="evolucion">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Evolución del PIB departamental y nacional</h2>
+        <p>Los valores están en miles de millones de pesos corrientes, la misma unidad para el departamento y el país. El crecimiento es real (en volumen, con año de referencia 2015) tal como lo publica el DANE, y la participación se calcula con valores a precios corrientes.</p>
+      </div>
+
+      <Tabla
+        id="tabla-3"
+        numero="3"
+        titulo="Evolución del PIB departamental y nacional, 2016-2025"
+        caption="PIB de Bolívar y de Colombia, crecimiento real anual y participación de Bolívar en el PIB nacional"
+        fuente={`DANE, Cuentas nacionales departamentales, PIB por departamento, base 2015 (actualización del 3 de julio de 2026).`}
+        nota="PIB en miles de millones de pesos corrientes. Crecimiento en volumen (series encadenadas, año de referencia 2015). 2024 (p) provisional; 2025 (pr) preliminar. Los promedios son aritméticos simples."
+      >
+        <thead>
+          <tr>
+            <th scope="col">Año</th>
+            <th scope="col">PIB Bolívar ($)</th>
+            <th scope="col">PIB Colombia ($)</th>
+            <th scope="col">Crecimiento Bolívar (%)</th>
+            <th scope="col">Crecimiento Colombia (%)</th>
+            <th scope="col">Participación en el PIB nacional (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {s.map((p) => (
+            <tr>
+              <th scope="row">{p.label}</th>
+              <td class="bol">{n1(p.pibBol)}</td>
+              <td class="col">{n1(p.pibCol)}</td>
+              <td class:list={[p.growthBol < 0 ? 'neg' : '']}>{n1(p.growthBol)}</td>
+              <td class:list={[p.growthCol < 0 ? 'neg' : '']}>{n1(p.growthCol)}</td>
+              <td>{n2(p.share)}</td>
+            </tr>
+          ))}
+          <tr class="total">
+            <th scope="row">Promedio</th>
+            <td>{n1(prom.pibBol)}</td>
+            <td>{n1(prom.pibCol)}</td>
+            <td>{n1(m.promedioCrecimiento.bolivar)}</td>
+            <td>{n1(m.promedioCrecimiento.colombia)}</td>
+            <td>{n2(m.promedioParticipacion)}</td>
+          </tr>
+        </tbody>
+      </Tabla>
+
+      <Interpretacion>
+        <p>El PIB de Bolívar pasó de {billones(s[0].pibBol)} billones de pesos en 2016 a {billones(s.at(-1)!.pibBol)} billones en 2025, es decir, se multiplicó por {n2(s.at(-1)!.pibBol / s[0].pibBol)}. Una parte grande de ese salto es inflación: en volumen, la economía creció {n1(m.realTotalGrowth.bolivar)} % en los diez años, un promedio anual compuesto cercano a 2,5 %. El promedio simple de las tasas anuales es {n1(m.promedioCrecimiento.bolivar)} %, frente a {n1(m.promedioCrecimiento.colombia)} % de Colombia.</p>
+        <p>La participación en el PIB nacional casi no cambió: osciló entre 3,47 % (2020) y 3,63 % (2017), y en 2025 es de {n2(s.at(-1)!.share)} %. En promedio, Bolívar aporta {n2(m.promedioParticipacion)} % de la producción colombiana.</p>
+      </Interpretacion>
+
+      <ColumnChart
+        titulo="Crecimiento real anual del PIB, Bolívar y Colombia"
+        subtitulo="Variación porcentual anual en volumen, base 2015"
+        desc="Gráfica de columnas con la variación anual del PIB real de Bolívar y de Colombia entre 2016 y 2025. Ambos caen en 2020, Bolívar 10,5 por ciento y Colombia 7,2, y rebotan en 2021 con 14,3 y 10,8 por ciento. Desde 2023 Bolívar crece menos que el país."
+        labels={s.map((p) => String(p.year))}
+        series={[
+          { name: 'Bolívar', color: 'var(--bol)', values: s.map((p) => p.growthBol) },
+          { name: 'Colombia', color: 'var(--col)', values: s.map((p) => p.growthCol) },
+        ]}
+      />
+
+      <div>
+        <LineChart
+          titulo="PIB real, índice 2016 = 100"
+          subtitulo="Series encadenadas en volumen"
+          desc="Índice del PIB real con base 2016 igual a 100. Bolívar cae más que Colombia en 2020, se recupera con más fuerza en 2021 y 2022 y termina 2025 en 124,5, casi igual que Colombia en 124,3."
+          labels={s.map((p) => String(p.year))}
+          series={[
+            { name: 'Bolívar', color: 'var(--bol)', values: idx('volBol'), marker: 'circle' },
+            { name: 'Colombia', color: 'var(--col)', values: idx('volCol'), marker: 'square', dash: '6 4' },
+          ]}
+          cero={false}
+          decimales={0}
+          unidad=""
+        />
+        <LineChart
+          titulo="Participación de Bolívar en el PIB nacional"
+          subtitulo="Porcentaje, a precios corrientes"
+          desc="Participación de Bolívar en el PIB de Colombia. Se mantiene entre 3,47 y 3,63 por ciento durante los diez años, con el mínimo en 2020."
+          labels={s.map((p) => String(p.year))}
+          series={[{ name: 'Participación de Bolívar', color: 'var(--bol)', values: s.map((p) => p.share), marker: 'diamond' }]}
+          cero={false}
+          decimales={2}
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt" id="estructura">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Distribución sectorial del PIB departamental</h2>
+        <p>Valor agregado de 2025 (preliminar) por actividad económica, según la clasificación CIIU Rev. 4 adaptada para Colombia que publica el DANE. Las 12 ramas oficiales se agruparon en las nueve categorías de la guía.</p>
+      </div>
+
+      <Tabla
+        id="tabla-4"
+        numero="4"
+        titulo="Distribución sectorial del PIB de Bolívar, 2025 (pr)"
+        caption="Valor agregado por actividad económica en Bolívar en 2025, con su participación y la de Colombia"
+        fuente="DANE, Cuentas nacionales departamentales, Resultados por actividad económica, base 2015 (3 de julio de 2026)."
+        nota={`Valores a precios corrientes, en miles de millones de pesos. Los porcentajes se calculan sobre el valor agregado (${n1(sectores.valorAgregado2025)}); al sumarle los impuestos (${n1(sectores.impuestos2025)}) se obtiene el PIB de ${n1(sectores.pib2025)}.`}
+      >
+        <thead>
+          <tr>
+            <th scope="col">Actividad económica</th>
+            <th scope="col">Valor Bolívar 2025 ($)</th>
+            <th scope="col">Participación Bolívar 2025 (%)</th>
+            <th scope="col">Participación Colombia 2025 (%)</th>
+            <th scope="col">Participación Bolívar 2016 (%)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {g.map((x) => (
+            <tr>
+              <th scope="row">{x.label}</th>
+              <td>{n1(x.valor2025)}</td>
+              <td class="bol">{n1(x.share2025)}</td>
+              <td class="col">{n1(x.shareCol2025)}</td>
+              <td>{n1(x.share2016)}</td>
+            </tr>
+          ))}
+          <tr class="total">
+            <th scope="row">Total valor agregado</th>
+            <td>{n1(sectores.valorAgregado2025)}</td>
+            <td>100,0</td>
+            <td>100,0</td>
+            <td>100,0</td>
+          </tr>
+        </tbody>
+      </Tabla>
+
+      <div class="chart">
+        <h3>Peso de cada actividad: Bolívar frente a Colombia, 2025</h3>
+        <p class="sub">Porcentaje del valor agregado a precios corrientes</p>
+        <ul class="bars">
+          {top.map((x) => (
+            <li>
+              <span class="name">{x.label}</span>
+              <div class="row"><div class="track"><div class={`fill bol w-${Math.round(Math.min(x.share2025 * 3.6, 100))}`}></div></div><span class="num">{n1(x.share2025)} %</span></div>
+              <div class="row sub-row"><div class="track"><div class={`fill col w-${Math.round(Math.min(x.shareCol2025 * 3.6, 100))}`}></div></div><span class="num">{n1(x.shareCol2025)} %</span></div>
+            </li>
+          ))}
+        </ul>
+        <ul class="legend">
+          <li><svg viewBox="0 0 14 12" aria-hidden="true"><rect width="14" height="12" rx="2" fill="var(--bol)" /></svg>Bolívar</li>
+          <li><svg viewBox="0 0 14 12" aria-hidden="true"><rect width="14" height="12" rx="2" fill="var(--col)" /></svg>Colombia</li>
+        </ul>
+      </div>
+
+      <details class="chart">
+        <summary><strong>Ver el detalle de las 12 ramas oficiales del DANE</strong></summary>
+        <div class="table-scroll" tabindex="0" role="region" aria-label="Detalle de las 12 ramas de actividad">
+          <table class="data">
+            <caption class="visually-hidden">Valor agregado de Bolívar por rama de actividad, participación y crecimiento real 2016-2025</caption>
+            <thead>
+              <tr>
+                <th scope="col">Rama de actividad</th>
+                <th scope="col">Valor 2025 ($)</th>
+                <th scope="col">Part. 2016 (%)</th>
+                <th scope="col">Part. 2025 (%)</th>
+                <th scope="col">Crec. real 2016-2025 Bolívar (%)</th>
+                <th scope="col">Crec. real 2016-2025 Colombia (%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sectores.detalle.map((x) => (
+                <tr>
+                  <th scope="row">{x.label}</th>
+                  <td>{n1(x.valor2025)}</td>
+                  <td>{n1(x.share2016)}</td>
+                  <td class="bol">{n1(x.share2025)}</td>
+                  <td class:list={[x.realBol < 0 ? 'neg' : 'pos']}>{sgn(x.realBol)}</td>
+                  <td class:list={[x.realCol < 0 ? 'neg' : 'pos']}>{sgn(x.realCol)}</td>
+                </tr>
+              ))}
+              <tr class="total">
+                <th scope="row">Valor agregado total</th>
+                <td>{n1(sectores.valorAgregado2025)}</td>
+                <td>100,0</td>
+                <td>100,0</td>
+                <td>{sgn(sectores.realValorAgregado.bolivar)}</td>
+                <td>{sgn(sectores.realValorAgregado.colombia)}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="source"><strong>Fuente:</strong> DANE, Resultados por actividad económica, base 2015. El crecimiento real compara el volumen de 2025 con el de 2016; las series encadenadas no son aditivas, por eso el total no es la suma de las ramas.</p>
+      </details>
+
+      <Interpretacion titulo="Cambios en la estructura productiva">
+        <p>La construcción pasó de pesar {n1(g[3].share2016)} % del valor agregado en 2016 a {n1(g[3].share2025)} % en 2025, mientras la agricultura subió de {n1(g[0].share2016)} % a {n1(g[0].share2025)} % y la administración pública, educación y salud, de {n1(g[7].share2016)} % a {n1(g[7].share2025)} %. El comercio y el transporte pasaron de {n1(g[4].share2016)} % a {n1(g[4].share2025)} %, y la industria bajó de {n1(g[2].share2016)} % a {n1(g[2].share2025)} %.</p>
+        <p>Como el peso a precios corrientes mezcla precios y volúmenes, conviene mirar también el crecimiento real: la agricultura creció {n1(g[0].realBol!)} % entre 2016 y 2025, la administración pública, educación y salud {n1(g[7].realBol!)} %, el comercio y el transporte {n1(g[4].realBol!)} % y la industria {n1(g[2].realBol!)} %, frente a {n1(sectores.realValorAgregado.bolivar)} % del valor agregado total. En cambio, la construcción cayó {n1(Math.abs(g[3].realBol!))} % y las minas y canteras {n1(Math.abs(g[1].realBol!))} %. El mayor peso de la agricultura corresponde, entonces, a un aumento real de la producción y no solo a precios.</p>
+        <p>En 2020 el comercio bajó a {n1(g[4].share2020)} % del valor agregado y la administración pública subió a {n1(g[7].share2020)} %: el sector público amortiguó la crisis mientras el comercio y el turismo se frenaban.</p>
+      </Interpretacion>
+    </div>
+  </section>
+
+  <section class="section" id="analisis">
+    <div class="wrap-narrow">
+      <div class="section-head">
+        <h2>Análisis del PIB</h2>
+        <p>Respuestas a las preguntas de la guía, apoyadas en las Tablas 3 y 4.</p>
+      </div>
+
+      <h3>¿Cómo ha evolucionado el PIB durante los últimos diez años?</h3>
+      <p>La trayectoria tuvo cuatro etapas. Entre 2016 y 2019 hubo crecimiento sostenido, con un promedio de 3,2 % anual. En 2020 la pandemia produjo una caída de 10,5 %. En 2021 y 2022 vino la recuperación, con 14,3 % y 8,5 %. Desde 2023 el crecimiento se estancó: 0,6 %, 0,3 % y 2,0 %. En volumen, el PIB pasó de 29.285 a 36.462 miles de millones de pesos de 2015.</p>
+
+      <h3>¿Ha crecido por encima o por debajo del promedio nacional?</h3>
+      <p>Depende del periodo. En el promedio simple de los diez años Bolívar crece algo más ({n1(m.promedioCrecimiento.bolivar)} % frente a {n1(m.promedioCrecimiento.colombia)} %), y en el acumulado real el resultado es casi idéntico ({n1(m.realTotalGrowth.bolivar)} % frente a {n1(m.realTotalGrowth.colombia)} %). Pero el patrón es desigual: creció por encima del país en {m.añosPorEncima.join(', ')} y por debajo en {m.añosPorDebajo.join(', ')}. En los tres últimos años, 2023, 2024 y 2025, quedó por debajo del crecimiento nacional.</p>
+
+      <h3>¿En qué años creció más y en cuáles disminuyó?</h3>
+      <p>El mayor crecimiento fue el de 2021 (14,3 %) y la mayor caída, la de 2020 (−10,5 %). Están ligados: una caída de 10,5 % exige un aumento de 11,7 % para volver al nivel anterior, y en 2021 el departamento lo superó, de modo que su PIB real de 2021 quedó 2,3 % por encima del de 2019. En 2020 Bolívar cayó más que Colombia (−10,5 % frente a −7,2 %) y en 2021 rebotó más (14,3 % frente a 10,8 %): es una economía más sensible a los choques.</p>
+
+      <h3>¿Qué participación tiene en la producción total de Colombia?</h3>
+      <p>Cerca de {n1(m.promedioParticipacion)} % ({n2(s.at(-1)!.share)} % en 2025). Es la séptima economía del país, después de Bogotá, Antioquia, Valle del Cauca, Santander, Cundinamarca y Atlántico, y la segunda del Caribe: representa {n1(m.caribe2025.find((c) => c.name === 'Bolívar')!.share)} % del PIB de los siete departamentos de la región, detrás de Atlántico ({n1(m.caribe2025.find((c) => c.name === 'Atlántico')!.share)} %).</p>
+
+      <h3>¿Qué actividades aportan más al PIB?</h3>
+      <p>En 2025 pesan más el comercio, transporte, alojamiento y servicios de comida ({n1(g[4].share2025)} %) y la administración pública, educación y salud ({n1(g[7].share2025)} %). Siguen las industrias manufactureras ({n1(g[2].share2025)} %). Pesan menos la información y las comunicaciones ({n1(g[5].share2025)} %) y la explotación de minas y canteras ({n1(g[1].share2025)} %).</p>
+
+      <h3>¿Qué acontecimientos explican los principales cambios?</h3>
+      <p>Los datos del DANE muestran qué cambió, pero no por qué. Las explicaciones que siguen son plausibles, no hechos comprobados con estas tablas:</p>
+      <ul>
+        <li><strong>Pandemia y reapertura.</strong> Los cierres de 2020 frenaron el comercio, el turismo y la construcción; la reapertura explica el rebote de 2021 y 2022.</li>
+        <li><strong>Construcción y minería débiles.</strong> Su volumen es menor hoy que en 2016. En 2025 la región Caribe registró caídas de 6,0 % en construcción y de 9,2 % en minas y canteras según el boletín del DANE, lo que sugiere un problema que no es solo de Bolívar.</li>
+        <li><strong>Desaceleración reciente.</strong> El crecimiento fue inferior al nacional en 2023, 2024 y 2025. Las tasas de interés altas pudieron enfriar la inversión y el consumo.</li>
+        <li><strong>Turismo.</strong> Cartagena atrae visitantes del exterior, lo que respalda el peso del comercio, el transporte y el alojamiento.</li>
+        <li><strong>Sector público estable.</strong> La administración, la educación y la salud crecieron de forma continua, lo que explica su mayor peso en los años de crisis.</li>
+      </ul>
+
+      <h3>¿Qué importancia tiene el departamento en la economía colombiana?</h3>
+      <p>Es un departamento grande, pero menos productivo por habitante que el promedio: su PIB por persona fue de 29,7 millones de pesos en 2025, equivalente a {n1(m.perCapitaRatio)} % del nacional (34,9 millones). Su aporte descansa en el puerto, la industria y el turismo de Cartagena, en el sector público que sostiene los servicios básicos en el resto del territorio y en una agricultura que crece con fuerza. Ser una economía grande no implica mayor producción por persona.</p>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="wrap grid grid-2">
+      <Foto foto={fotos.laPopa} />
+      <div>
+        <h2>Cartagena concentra la producción</h2>
+        <p>Cartagena es el motor del PIB departamental: allí están el puerto, la zona industrial de Mamonal, la refinería, los hoteles y buena parte del comercio y de la administración. Por eso los choques que golpean a la ciudad (como el cierre del turismo en 2020) se sienten en toda la economía del departamento.</p>
+        <p>La estimación del peso de la ciudad en el valor agregado departamental es de alrededor de 65 %; es un cálculo de terceros a partir del valor agregado municipal del DANE y debe tomarse como orden de magnitud.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap"><Pager path="/pib" /></div>
+</BaseLayout>

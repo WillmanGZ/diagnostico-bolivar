@@ -1,0 +1,75 @@
+{
+ "fuente": "DANE, GEIH, boletín técnico y anexo \"Empleo informal y seguridad social\", octubre-diciembre de 2025. Metodología vigente desde el rediseño de la GEIH (2021).",
+ "serie": [
+  {
+   "year": 2016,
+   "cartagena": null,
+   "colombia": null,
+   "trece": null,
+   "dif": null
+  },
+  {
+   "year": 2017,
+   "cartagena": null,
+   "colombia": null,
+   "trece": null,
+   "dif": null
+  },
+  {
+   "year": 2018,
+   "cartagena": null,
+   "colombia": null,
+   "trece": null,
+   "dif": null
+  },
+  {
+   "year": 2019,
+   "cartagena": null,
+   "colombia": null,
+   "trece": null,
+   "dif": null
+  },
+  {
+   "year": 2020,
+   "cartagena": null,
+   "colombia": null,
+   "trece": null,
+   "dif": null
+  },
+  {
+   "year": 2021,
+   "cartagena": 62,
+   "colombia": 59.4,
+   "trece": 45,
+   "dif": 2.6
+  },
+  {
+   "year": 2022,
+   "cartagena": 59.9,
+   "colombia": 57.9,
+   "trece": 43.5,
+   "dif": 2
+  },
+  {
+   "year": 2023,
+   "cartagena": 53.5,
+   "colombia": 56.4,
+   "trece": 41.7,
+   "dif": -2.9
+  },
+  {
+   "year": 2024,
+   "cartagena": 48.9,
+   "colombia": 55.9,
+   "trece": 41.9,
+   "dif": -7
+  },
+  {
+   "year": 2025,
+   "cartagena": 49.6,
+   "colombia": 55.7,
+   "trece": 42.2,
+   "dif": -6.1
+  }
+ ]
+}

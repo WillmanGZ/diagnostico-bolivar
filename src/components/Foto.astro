@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import type { Foto } from '../data/fotos';
+
+interface Props { foto: Foto; sizes?: string; width?: number; eager?: boolean; class?: string }
+const { foto, sizes = '(min-width: 72rem) 36rem, 100vw', width = 1200, eager = false, class: cls } = Astro.props;
+---
+
+<figure class:list={['photo', cls]}>
+  <Image
+    src={foto.src}
+    alt={foto.alt}
+    widths={[480, 800, width]}
+    sizes={sizes}
+    width={width}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    format="webp"
+    quality={68}
+  />
+  <figcaption>
+    {foto.caption} Foto: {foto.autor}, <a href={foto.url} rel="noopener noreferrer">{foto.licencia}</a>, vía Wikimedia Commons.
+  </figcaption>
+</figure>

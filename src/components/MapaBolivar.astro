@@ -1,0 +1,15 @@
+---
+import mapas from '../data/mapas.json';
+const { width, height, municipios } = mapas.bolivar;
+---
+
+<figure class="map">
+  <svg viewBox={`0 0 ${width} ${height}`} role="img" aria-labelledby="mb-t mb-d">
+    <title id="mb-t">Mapa de los municipios de Bolívar</title>
+    <desc id="mb-d">División municipal de Bolívar. Cartagena de Indias, la capital, está resaltada en naranja sobre la costa norte.</desc>
+    {municipios.map((m) => (
+      <path class:list={['mun', { capital: m.capital }]} d={m.d}><title>{m.name}</title></path>
+    ))}
+  </svg>
+  <figcaption>Municipios de Bolívar (45 de 46; el mapa base no incluye Norosí). Pase el cursor sobre un municipio para ver su nombre. Fuente: geometrías abiertas basadas en el Marco Geoestadístico Nacional del DANE.</figcaption>
+</figure>

@@ -1,0 +1,147 @@
+{
+ "fuente": "DANE, IPC variaciones mensuales por ciudades (archivo \"IPC ciudades\", actualizado el 7 de octubre de 2026). Variación año corrido a diciembre.",
+ "serie": [
+  {
+   "year": 2017,
+   "cartagena": 3.17,
+   "colombia": 4.09,
+   "dif": -0.92
+  },
+  {
+   "year": 2018,
+   "cartagena": 3.45,
+   "colombia": 3.18,
+   "dif": 0.27
+  },
+  {
+   "year": 2019,
+   "cartagena": 3.88,
+   "colombia": 3.8,
+   "dif": 0.08
+  },
+  {
+   "year": 2020,
+   "cartagena": 0.35,
+   "colombia": 1.61,
+   "dif": -1.26
+  },
+  {
+   "year": 2021,
+   "cartagena": 5.75,
+   "colombia": 5.62,
+   "dif": 0.13
+  },
+  {
+   "year": 2022,
+   "cartagena": 14.33,
+   "colombia": 13.12,
+   "dif": 1.21
+  },
+  {
+   "year": 2023,
+   "cartagena": 9.91,
+   "colombia": 9.28,
+   "dif": 0.63
+  },
+  {
+   "year": 2024,
+   "cartagena": 4.57,
+   "colombia": 5.2,
+   "dif": -0.63
+  },
+  {
+   "year": 2025,
+   "cartagena": 4.8,
+   "colombia": 5.1,
+   "dif": -0.3
+  }
+ ],
+ "promedio": {
+  "cartagena": 5.58,
+  "colombia": 5.67
+ },
+ "meses2022Cartagena": [
+  1.31,
+  1.68,
+  1.09,
+  1.31,
+  1.34,
+  0.55,
+  0.94,
+  1.56,
+  0.93,
+  0.57,
+  0.7,
+  1.49
+ ],
+ "meses2022Colombia": [
+  1.67,
+  1.63,
+  1,
+  1.25,
+  0.84,
+  0.51,
+  0.81,
+  1.02,
+  0.93,
+  0.72,
+  0.77,
+  1.26
+ ],
+ "otrasCiudades": [
+  {
+   "year": 2017,
+   "barranquilla": 3.24,
+   "santaMarta": 2.84,
+   "bogota": 4.63
+  },
+  {
+   "year": 2018,
+   "barranquilla": 3.69,
+   "santaMarta": 2.73,
+   "bogota": 3.06
+  },
+  {
+   "year": 2019,
+   "barranquilla": 4.13,
+   "santaMarta": 3.83,
+   "bogota": 3.49
+  },
+  {
+   "year": 2020,
+   "barranquilla": 2.24,
+   "santaMarta": 2.11,
+   "bogota": 1.17
+  },
+  {
+   "year": 2021,
+   "barranquilla": 7.27,
+   "santaMarta": 8.99,
+   "bogota": 4.62
+  },
+  {
+   "year": 2022,
+   "barranquilla": 14.28,
+   "santaMarta": 14.26,
+   "bogota": 12.35
+  },
+  {
+   "year": 2023,
+   "barranquilla": 10.35,
+   "santaMarta": 10.5,
+   "bogota": 9.43
+  },
+  {
+   "year": 2024,
+   "barranquilla": 3.34,
+   "santaMarta": 0.47,
+   "bogota": 5.69
+  },
+  {
+   "year": 2025,
+   "barranquilla": 5.07,
+   "santaMarta": 3.64,
+   "bogota": 5.41
+  }
+ ]
+}
