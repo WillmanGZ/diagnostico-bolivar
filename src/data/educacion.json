@@ -1,0 +1,18 @@
+{
+ "fuente": "Ministerio de Educación Nacional, estadísticas en educación por municipio (datos.gov.co, conjunto nudc-7mev); promedio ponderado por población de 5 a 16 años.",
+ "nota": "Cobertura neta total de 5 a 16 años. El valor oficial nacional del MEN con proyecciones actualizadas en julio de 2025 es 85,0 % en 2024, pero no es comparable con las cifras municipales.",
+ "serie": [
+  {
+   "year": 2023,
+   "bolivar": 99.5,
+   "cartagena": 110,
+   "colombia": 90.3
+  },
+  {
+   "year": 2024,
+   "bolivar": 97.8,
+   "cartagena": 109,
+   "colombia": 88.2
+  }
+ ]
+}

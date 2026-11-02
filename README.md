@@ -2,7 +2,7 @@
 
 Diagnóstico socioeconómico y análisis macroeconómico del departamento de Bolívar (Colombia): PIB, inflación, desempleo e informalidad 2016-2025 frente al total nacional.
 
-Trabajo de **Fundamentos de Economía**, Facultad de Ingeniería, Universidad Libre (Barranquilla), por Willman Alfredo Giraldo Zambrano y Jaime Enrique Ariza Ortiz. Docente: Mg. Deiber E. Puello C.
+Trabajo de **Fundamentos de Economía**, Universidad Libre (Barranquilla), por Willman Alfredo Giraldo Zambrano y Jaime Enrique Ariza Ortiz. Docente: Mg. Deiber E. Puello C.
 
 Sitio estático hecho con [Astro](https://astro.build), sin JavaScript en el cliente, pensado para desplegarse gratis en Vercel.
 

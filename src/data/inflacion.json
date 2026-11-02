@@ -143,5 +143,72 @@
    "santaMarta": 3.64,
    "bogota": 5.41
   }
- ]
+ ],
+ "gruposDic2025": {
+  "fuente": "DANE, IPC diciembre de 2025, anexo, hoja 5: variación año corrido por ciudades y divisiones de gasto.",
+  "totalCartagena": 4.8,
+  "totalColombia": 5.1,
+  "divisiones": [
+   {
+    "grupo": "Alimentos y bebidas no alcohólicas",
+    "cartagena": 4.91,
+    "colombia": 5.07
+   },
+   {
+    "grupo": "Bebidas alcohólicas y tabaco",
+    "cartagena": 6.36,
+    "colombia": 6.37
+   },
+   {
+    "grupo": "Prendas de vestir y calzado",
+    "cartagena": 3.9,
+    "colombia": 2.12
+   },
+   {
+    "grupo": "Alojamiento, agua, electricidad, gas y otros combustibles",
+    "cartagena": 2.19,
+    "colombia": 4.76
+   },
+   {
+    "grupo": "Muebles, artículos para el hogar y para la conservación ordinaria del hogar",
+    "cartagena": 2.78,
+    "colombia": 3.31
+   },
+   {
+    "grupo": "Salud",
+    "cartagena": 7.98,
+    "colombia": 7.2
+   },
+   {
+    "grupo": "Transporte",
+    "cartagena": 9.47,
+    "colombia": 5.35
+   },
+   {
+    "grupo": "Información y comunicación",
+    "cartagena": 1.52,
+    "colombia": 1.22
+   },
+   {
+    "grupo": "Recreación y cultura",
+    "cartagena": 3.94,
+    "colombia": 1.85
+   },
+   {
+    "grupo": "Educación",
+    "cartagena": 9.19,
+    "colombia": 7.36
+   },
+   {
+    "grupo": "Restaurantes y hoteles",
+    "cartagena": 8.39,
+    "colombia": 7.91
+   },
+   {
+    "grupo": "Bienes y servicios diversos",
+    "cartagena": 2,
+    "colombia": 4.97
+   }
+  ]
+ }
 }

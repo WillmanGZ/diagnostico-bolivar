@@ -1,7 +1,7 @@
 // Genera src/data/*.json a partir de los anexos oficiales del DANE guardados en data/raw/.
 // Uso: npm run data
 import { createRequire } from 'node:module';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
@@ -254,21 +254,28 @@ const natLab = Object.fromEntries(
   }),
 );
 
-// Cartagena: año móvil enero-diciembre de la GEIH rediseñada (solo 2021-2025).
-const cm = sheet('anex-GEIH-dic2025.xlsx', 'Año_móvil_32_ciudades');
-const cmStart = cm.findIndex((r) => String(r[0]).trim() === 'Cartagena');
-const cmHead = cm.slice(cmStart, cmStart + 6).find((r) => r.some((v) => String(v).startsWith('Ene - Dic')));
-const cmBlock = cm.slice(cmStart, cmStart + 22);
-const cartRow = (label) => {
-  const row = cmBlock.find((r) => String(r[0]).trim().startsWith(label));
-  const o = {};
-  cmHead.forEach((v, i) => {
-    const m = String(v).match(/^Ene - Dic (\d{2})$/);
-    if (m) o[2000 + +m[1]] = r1(num(row[i]));
-  });
-  return o;
+// Cartagena: promedio anual de los cuatro trimestres no traslapados (ene-mar, abr-jun, jul-sep, oct-dic) de la
+// serie trimestral de la GEIH (desocupados sobre fuerza de trabajo). Reproduce el año móvil enero-diciembre
+// que publica el DANE para 2021-2025 (12,3; 10,9; 10,9; 12,4; 10,9) y completa 2016-2020.
+const q23 = sheet('anex-GEIH-dic2025.xlsx', 'Total 23 ciudades A.M. Trim');
+const qStart = q23.findIndex((r) => String(r[0]).trim() === 'Cartagena');
+const qYears = q23[qStart + 2], qLabels = q23[qStart + 3];
+let qCur = null;
+const qColYear = qYears.map((v) => { if (typeof v === 'number') qCur = v; return qCur; });
+const qNorm = (v) => String(v).toLowerCase().replace(/[\s.*]/g, '');
+const qRow = (label) => q23.slice(qStart, qStart + 20).find((r) => String(r[0]).trim().startsWith(label));
+const cartAnual = (y) => {
+  const cols = ['ene-mar', 'abr-jun', 'jul-sep', 'oct-dic'].map((q) => qColYear.findIndex((yy, i) => yy === y && qNorm(qLabels[i]) === q));
+  if (cols.some((i) => i < 0)) throw new Error('Faltan trimestres de Cartagena en ' + y);
+  const m = (row) => cols.reduce((a, i) => a + row[i], 0) / 4;
+  return {
+    td: r1((m(qRow('Población desocupada')) / m(qRow('Fuerza de trabajo'))) * 100),
+    tgp: r1(m(qRow('Tasa Global de Participación'))),
+    to: r1(m(qRow('Tasa de Ocupación'))),
+  };
 };
-const cartLab = { td: cartRow('Tasa de Desocupación'), tgp: cartRow('Tasa Global de Participación'), to: cartRow('Tasa de Ocupación') };
+const cartLab = { td: {}, tgp: {}, to: {} };
+YEARS.forEach((y) => { const c = cartAnual(y); cartLab.td[y] = c.td; cartLab.tgp[y] = c.tgp; cartLab.to[y] = c.to; });
 
 // Ocupados por rama de actividad (Bolívar, miles de personas).
 const ram = sheet('empleo-departamentos.xls', 'Ocu ramas anual  Dptos CIIU 4');
@@ -294,7 +301,7 @@ const desempleo = YEARS.map((y) => ({
   fuerzaTrabajoBol: r1(bolLab.fuerzaTrabajo[y]),
 }));
 save('empleo.json', {
-  fuente: 'DANE, GEIH. Bolívar: anexo "Empleo departamentos" (serie anual). Colombia: promedio anual de la serie mensual del anexo GEIH de diciembre de 2025. Cartagena: año móvil enero-diciembre (GEIH rediseñada, solo 2021-2025).',
+  fuente: 'DANE, GEIH. Bolívar: anexo "Empleo departamentos" (serie anual). Colombia: promedio anual de la serie mensual del anexo GEIH de diciembre de 2025. Cartagena: promedio de los cuatro trimestres de cada año de la serie trimestral de la GEIH (23 ciudades y áreas metropolitanas).',
   serie: desempleo,
   ramas: ramas.sort((a, b) => b.v2025 - a.v2025),
   totalOcupados2025: r1(totalOcup2025),
@@ -316,16 +323,83 @@ const infCart = infAnual('Cartagena');
 // Cifras oficiales publicadas en el boletín técnico GEIH oct-dic 2025, gráfico 6 (año enero-diciembre).
 const infColombia = { 2021: 59.4, 2022: 57.9, 2023: 56.4, 2024: 55.9, 2025: 55.7 };
 const inf13 = { 2021: 45.0, 2022: 43.5, 2023: 41.7, 2024: 41.9, 2025: 42.2 };
-const informalidad = YEARS.map((y) => ({
-  year: y,
-  cartagena: infCart[y] ?? null,
-  colombia: infColombia[y] ?? null,
-  trece: inf13[y] ?? null,
-  dif: infCart[y] != null ? r1(infCart[y] - infColombia[y]) : null,
-}));
+// Metodología anterior (informalidad por tamaño de empresa, hasta 5 trabajadores), serie trimestre móvil 2007-2020
+// del anexo del DANE de diciembre de 2020 a febrero de 2021. Solo cubre 13 ciudades y áreas metropolitanas y
+// Cartagena; no existe total nacional con esa definición. En 2020 el DANE no pudo medir marzo y abril por la
+// pandemia, así que 2020 es el promedio de jul-sep y oct-dic.
+const old = sheet('anexo_geih_informalidad_dic20_feb21.xls', 'Prop informalidad');
+const oldYears = [];
+old[6].forEach((v, i) => { if (typeof v === 'number') oldYears.push([v, i]); });
+const oldAnual = (row, y) => {
+  const [, i] = oldYears.find(([yy]) => yy === y);
+  const offs = y === 2020 ? [6, 9] : [0, 3, 6, 9];
+  const q = offs.map((o) => row[i + o]);
+  if (q.some((v) => typeof v !== 'number' || v === 0)) throw new Error('Datos incompletos en ' + y);
+  return r1(q.reduce((a, b) => a + b, 0) / q.length);
+};
+const oldCartRow = old[old.findIndex((r) => String(r[0]).trim() === 'Cartagena') + 4];
+const old13Row = old[9];
+if (String(oldCartRow[0]).trim() !== 'Ocupados Informales' || String(old13Row[0]).trim() !== 'Ocupados Informales') throw new Error('Estructura inesperada del anexo de informalidad');
+const OLD_YEARS = [2016, 2017, 2018, 2019, 2020];
+const informalidad = YEARS.map((y) => {
+  const esAnterior = OLD_YEARS.includes(y);
+  const cart = esAnterior ? oldAnual(oldCartRow, y) : infCart[y];
+  const trece = esAnterior ? oldAnual(old13Row, y) : inf13[y];
+  const col = infColombia[y] ?? null;
+  return {
+    year: y,
+    metodologia: esAnterior ? 'anterior' : 'vigente',
+    cartagena: cart ?? null,
+    colombia: col,
+    trece: trece ?? null,
+    dif: col != null && cart != null ? r1(cart - col) : null,
+    difTrece: cart != null && trece != null ? r1(cart - trece) : null,
+  };
+});
 save('informalidad.json', {
-  fuente: 'DANE, GEIH, boletín técnico y anexo "Empleo informal y seguridad social", octubre-diciembre de 2025. Metodología vigente desde el rediseño de la GEIH (2021).',
+  fuente: 'DANE, GEIH. 2021-2025: boletín técnico y anexo "Empleo informal y seguridad social", octubre-diciembre de 2025 (metodología vigente). 2016-2020: anexo de diciembre de 2020 a febrero de 2021 (metodología anterior, por tamaño de empresa).',
   serie: informalidad,
+});
+
+// ----------------------- Grupos de gasto del IPC, 2025 -----------------------
+const ipcDiv = sheet('anex-IPC-dic2025.xlsx', '5'); // variación año corrido por ciudad y división
+const ipcHead = ipcDiv.find((r) => String(r[0]).trim() === 'Ciudades');
+const ipcTot = ipcDiv.find((r) => String(r[0]).trim() === 'Total IPC');
+const ipcCar = ipcDiv.find((r) => /cartagena/i.test(String(r[0])));
+const iTotal = ipcHead.indexOf('Total');
+const titulo = (h) => String(h).trim().toLowerCase().replace(/^./, (x) => x.toUpperCase());
+const gruposIpc = ipcHead
+  .map((h, i) => ({ h, i }))
+  .filter((c) => c.i > 0 && c.i < iTotal)
+  .map((c) => ({ grupo: titulo(c.h), cartagena: num(ipcCar[c.i]), colombia: num(ipcTot[c.i]) }));
+const ipcFile = JSON.parse(readFileSync(join(out, 'inflacion.json'), 'utf8'));
+ipcFile.gruposDic2025 = {
+  fuente: 'DANE, IPC diciembre de 2025, anexo, hoja 5: variación año corrido por ciudades y divisiones de gasto.',
+  totalCartagena: num(ipcCar[iTotal]),
+  totalColombia: num(ipcTot[iTotal]),
+  divisiones: gruposIpc,
+};
+save('inflacion.json', ipcFile);
+
+// ------------- Cobertura educativa neta (5 a 16 años), MEN datos abiertos -------------
+// Promedio ponderado por población de 5 a 16 años de las tasas municipales (conjunto "MEN estadísticas en
+// educación en preescolar, básica y media por municipio", datos.gov.co). Las tasas pueden superar 100 % por
+// desajustes entre matrícula y proyecciones de población.
+const men = JSON.parse(readFileSync(raw('men-cobertura-neta-municipios-2023-2024.json'), 'utf8'));
+const cobertura = (filtro, año) => {
+  const rs = men.filter((r) => r.a_o === año && filtro(r));
+  const pob = rs.reduce((a, r) => a + +r.poblaci_n_5_16, 0);
+  return r1(rs.reduce((a, r) => a + +r.poblaci_n_5_16 * +r.cobertura_neta, 0) / pob);
+};
+save('educacion.json', {
+  fuente: 'Ministerio de Educación Nacional, estadísticas en educación por municipio (datos.gov.co, conjunto nudc-7mev); promedio ponderado por población de 5 a 16 años.',
+  nota: 'Cobertura neta total de 5 a 16 años. El valor oficial nacional del MEN con proyecciones actualizadas en julio de 2025 es 85,0 % en 2024, pero no es comparable con las cifras municipales.',
+  serie: ['2023', '2024'].map((a) => ({
+    year: +a,
+    bolivar: cobertura((r) => r.c_digo_departamento === '13', a),
+    cartagena: cobertura((r) => r.c_digo_municipio === '13001', a),
+    colombia: cobertura(() => true, a),
+  })),
 });
 
 console.log('Datos generados en src/data/');

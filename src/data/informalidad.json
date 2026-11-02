@@ -1,75 +1,95 @@
 {
- "fuente": "DANE, GEIH, boletín técnico y anexo \"Empleo informal y seguridad social\", octubre-diciembre de 2025. Metodología vigente desde el rediseño de la GEIH (2021).",
+ "fuente": "DANE, GEIH. 2021-2025: boletín técnico y anexo \"Empleo informal y seguridad social\", octubre-diciembre de 2025 (metodología vigente). 2016-2020: anexo de diciembre de 2020 a febrero de 2021 (metodología anterior, por tamaño de empresa).",
  "serie": [
   {
    "year": 2016,
-   "cartagena": null,
+   "metodologia": "anterior",
+   "cartagena": 54.7,
    "colombia": null,
-   "trece": null,
-   "dif": null
+   "trece": 47.5,
+   "dif": null,
+   "difTrece": 7.2
   },
   {
    "year": 2017,
-   "cartagena": null,
+   "metodologia": "anterior",
+   "cartagena": 55.2,
    "colombia": null,
-   "trece": null,
-   "dif": null
+   "trece": 47.2,
+   "dif": null,
+   "difTrece": 8
   },
   {
    "year": 2018,
-   "cartagena": null,
+   "metodologia": "anterior",
+   "cartagena": 54.2,
    "colombia": null,
-   "trece": null,
-   "dif": null
+   "trece": 47.1,
+   "dif": null,
+   "difTrece": 7.1
   },
   {
    "year": 2019,
-   "cartagena": null,
+   "metodologia": "anterior",
+   "cartagena": 52.9,
    "colombia": null,
-   "trece": null,
-   "dif": null
+   "trece": 46.2,
+   "dif": null,
+   "difTrece": 6.7
   },
   {
    "year": 2020,
-   "cartagena": null,
+   "metodologia": "anterior",
+   "cartagena": 56.8,
    "colombia": null,
-   "trece": null,
-   "dif": null
+   "trece": 47.6,
+   "dif": null,
+   "difTrece": 9.2
   },
   {
    "year": 2021,
+   "metodologia": "vigente",
    "cartagena": 62,
    "colombia": 59.4,
    "trece": 45,
-   "dif": 2.6
+   "dif": 2.6,
+   "difTrece": 17
   },
   {
    "year": 2022,
+   "metodologia": "vigente",
    "cartagena": 59.9,
    "colombia": 57.9,
    "trece": 43.5,
-   "dif": 2
+   "dif": 2,
+   "difTrece": 16.4
   },
   {
    "year": 2023,
+   "metodologia": "vigente",
    "cartagena": 53.5,
    "colombia": 56.4,
    "trece": 41.7,
-   "dif": -2.9
+   "dif": -2.9,
+   "difTrece": 11.8
   },
   {
    "year": 2024,
+   "metodologia": "vigente",
    "cartagena": 48.9,
    "colombia": 55.9,
    "trece": 41.9,
-   "dif": -7
+   "dif": -7,
+   "difTrece": 7
   },
   {
    "year": 2025,
+   "metodologia": "vigente",
    "cartagena": 49.6,
    "colombia": 55.7,
    "trece": 42.2,
-   "dif": -6.1
+   "dif": -6.1,
+   "difTrece": 7.4
   }
  ]
 }

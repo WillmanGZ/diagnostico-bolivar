@@ -17,12 +17,9 @@ const acCol = acumulado('colombia');
 const arriba = s.filter((p) => p.dif > 0).map((p) => p.year);
 const abajo = s.filter((p) => p.dif < 0).map((p) => p.year);
 const meses = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'];
-const grupos = [
-  { grupo: 'Transporte', v: 9.47 },
-  { grupo: 'Educación', v: 9.19 },
-  { grupo: 'Restaurantes y hoteles', v: 8.39 },
-  { grupo: 'Salud', v: 7.98 },
-];
+const divs = [...data.gruposDic2025.divisiones].sort((a, b) => b.cartagena - a.cartagena);
+const grupos = divs.slice(0, 4).map((x) => ({ grupo: x.grupo, v: x.cartagena }));
+const divPor = (nombre: string) => divs.find((x) => x.grupo.startsWith(nombre))!;
 ---
 
 <BaseLayout
@@ -139,28 +136,44 @@ const grupos = [
     <div class="wrap">
       <div class="section-head">
         <h2>Grupos de gasto que presionaron los precios</h2>
-        <p>El archivo del DANE entregado trae el IPC total de cada ciudad; los grupos de gasto de 2025 se tomaron del análisis de Cartagena Cómo Vamos, que usa datos del DANE.</p>
+        <p>El archivo entregado por el docente trae el IPC total de cada ciudad. Para los grupos de gasto se usó el anexo oficial del DANE del IPC de diciembre de 2025, que desagrega la variación por ciudad y por división.</p>
       </div>
       <Tabla
         id="tabla-5b"
         numero="5b"
-        titulo="Grupos de gasto con mayor variación en Cartagena, 2025"
-        caption="Variación anual del IPC de Cartagena por grupo de gasto en 2025"
-        fuente="Cartagena Cómo Vamos, infografía de inflación 2025, con datos del DANE."
-        nota="Variación anual a diciembre de 2025. Cifras tomadas de un análisis de terceros; se recomienda contrastarlas con el comunicado de prensa del IPC de diciembre de 2025 del DANE."
+        titulo="Variación del IPC por grupo de gasto, Cartagena y Colombia, 2025"
+        caption="Variación anual del IPC por división de gasto en Cartagena y en el total nacional en 2025, con diferencia en puntos porcentuales"
+        fuente="DANE, IPC diciembre de 2025, anexo, hoja 5 (variación año corrido por ciudades y divisiones de gasto)."
+        nota="Variación porcentual año corrido a diciembre de 2025, ordenada de mayor a menor en Cartagena. Diferencia = Cartagena − Colombia (pp). Los nombres de las divisiones siguen la clasificación del DANE."
       >
         <thead>
-          <tr><th scope="col">Grupo de gasto</th><th scope="col">Variación 2025 (%)</th><th scope="col">Frente al total de la ciudad (pp)</th></tr>
+          <tr>
+            <th scope="col">Grupo de gasto</th>
+            <th scope="col">Cartagena (%)</th>
+            <th scope="col">Colombia (%)</th>
+            <th scope="col">Diferencia (pp)</th>
+          </tr>
         </thead>
         <tbody>
-          {grupos.map((g) => (
-            <tr><th scope="row">{g.grupo}</th><td class="bol">{n2(g.v)}</td><td>{sgn(g.v - 4.8, 2)}</td></tr>
+          {divs.map((x) => (
+            <tr>
+              <th scope="row">{x.grupo}</th>
+              <td class="bol">{n2(x.cartagena)}</td>
+              <td class="col">{n2(x.colombia)}</td>
+              <td class:list={[x.cartagena - x.colombia > 0 ? 'neg' : 'pos']}>{sgn(x.cartagena - x.colombia, 2)}</td>
+            </tr>
           ))}
-          <tr class="total"><th scope="row">Total Cartagena</th><td>4,80</td><td>0,00</td></tr>
+          <tr class="total">
+            <th scope="row">Total</th>
+            <td>{n2(data.gruposDic2025.totalCartagena)}</td>
+            <td>{n2(data.gruposDic2025.totalColombia)}</td>
+            <td>{sgn(data.gruposDic2025.totalCartagena - data.gruposDic2025.totalColombia, 2)}</td>
+          </tr>
         </tbody>
       </Tabla>
       <Interpretacion>
-        <p>En 2025 los cuatro grupos que más subieron (transporte, educación, restaurantes y hoteles, y salud) subieron entre 1,7 y 2 veces más que la inflación total de la ciudad. Tres de ellos son servicios: el aumento de precios en Cartagena viene sobre todo del costo de los servicios y de la actividad turística, más que de los bienes.</p>
+        <p>En 2025 cuatro divisiones (transporte, educación, restaurantes y hoteles, y salud) subieron entre {n1(grupos[3].v)} % y {n1(grupos[0].v)} % en Cartagena, entre 1,7 y 2 veces la inflación total de la ciudad. Tres de ellos son servicios, así que el aumento de precios viene sobre todo del costo de los servicios y de la actividad turística. El transporte subió {n2(grupos[0].v)} % frente a {n2(divPor('Transporte').colombia)} % en el país, la mayor diferencia entre la ciudad y la nación.</p>
+        <p>Otras divisiones subieron mucho menos que en el país: alojamiento, agua, electricidad y gas ({n2(divPor('Alojamiento').cartagena)} % frente a {n2(divPor('Alojamiento').colombia)} %) y bienes y servicios diversos ({n2(divPor('Bienes').cartagena)} % frente a {n2(divPor('Bienes').colombia)} %). Eso explica por qué la inflación total de Cartagena ({n2(data.gruposDic2025.totalCartagena)} %) quedó por debajo de la nacional ({n2(data.gruposDic2025.totalColombia)} %) aunque los servicios turísticos y el transporte subieron más. Los alimentos, el rubro de mayor peso en el gasto de los hogares pobres, subieron casi igual ({n2(divPor('Alimentos').cartagena)} % frente a {n2(divPor('Alimentos').colombia)} %).</p>
       </Interpretacion>
     </div>
   </section>
@@ -181,7 +194,7 @@ const grupos = [
       <p>Las dos cosas, según el año. Fue superior en {arriba.join(', ')} e inferior en {abajo.join(', ')}. En conjunto es prácticamente igual: promedio de {n2(data.promedio.cartagena)} % frente a {n2(data.promedio.colombia)} %. Sin embargo, en los años de choque (2022 y 2023) Cartagena sufrió más, y en los dos últimos años (2024 y 2025) menos.</p>
 
       <h3>¿Qué grupos de bienes y servicios tuvieron mayor incidencia?</h3>
-      <p>En 2025 lideraron el transporte ({n2(grupos[0].v)} %), la educación ({n2(grupos[1].v)} %), los restaurantes y hoteles ({n2(grupos[2].v)} %) y la salud ({n2(grupos[3].v)} %). Para los hogares con menores ingresos pesa además el rubro de alimentos, que concentra una porción mayor de su gasto; el archivo entregado no permite medir su incidencia por año.</p>
+      <p>En 2025 lideraron el transporte ({n2(grupos[0].v)} %), la educación ({n2(grupos[1].v)} %), los restaurantes y hoteles ({n2(grupos[2].v)} %) y la salud ({n2(grupos[3].v)} %). Para los hogares con menores ingresos pesa además el rubro de alimentos, que concentra una porción mayor de su gasto y subió {n2(divPor('Alimentos').cartagena)} % en 2025; el archivo entregado no permite medir su incidencia en otros años.</p>
 
       <h3>¿Cómo afecta la inflación a los hogares y a las empresas?</h3>
       <p>Para los hogares, una inflación alta reduce el poder de compra, sobre todo en un departamento donde 44,8 % de las personas es pobre por ingresos y donde el empleo informal supera el 49 % en Cartagena: los ingresos informales rara vez se ajustan con los precios. Para las empresas, sube los costos de insumos, transporte y salarios, y las de turismo y servicios, que dominan la economía de Cartagena, enfrentan el dilema de trasladar el aumento al cliente o perder competitividad frente a otros destinos. La inflación alta también encarece el crédito, porque el Banco de la República sube sus tasas para controlarla, lo que frena la inversión y la construcción.</p>

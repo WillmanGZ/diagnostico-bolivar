@@ -14,7 +14,6 @@ import { n0, n1, sgn } from '../lib/format';
 const e = empleo.serie;
 const inf = informalidad.serie;
 const e25 = e.at(-1)!;
-const infConDato = inf.filter((p) => p.cartagena != null);
 const maxTd = [...e].sort((a, b) => b.bolivar - a.bolivar)[0];
 const minTd = [...e].sort((a, b) => a.bolivar - b.bolivar)[0];
 const ramas = empleo.ramas;
@@ -48,7 +47,7 @@ const corta = (s: string) => s.replace(/, entretenimiento, recreación y otras a
         <h2>Tasa de desempleo</h2>
       </div>
       <div class="note">
-        <p><strong>Dominio geográfico.</strong> El DANE publica la Gran Encuesta Integrada de Hogares (GEIH) con resultados anuales para el <strong>departamento de Bolívar</strong> completo, que es la serie principal de esta tabla. Para Cartagena (la capital) se incluye aparte el año móvil enero-diciembre disponible desde 2021, cuando la GEIH fue rediseñada. El total de comparación es el <strong>total nacional</strong>.</p>
+        <p><strong>Dominio geográfico.</strong> El DANE publica la Gran Encuesta Integrada de Hogares (GEIH) con resultados anuales para el <strong>departamento de Bolívar</strong> completo, que es la serie principal de esta tabla. Para Cartagena (la capital) se incluye aparte el promedio anual de los cuatro trimestres de la serie de la GEIH para 23 ciudades y áreas metropolitanas. El total de comparación es el <strong>total nacional</strong>.</p>
       </div>
 
       <Tabla
@@ -56,8 +55,8 @@ const corta = (s: string) => s.replace(/, entretenimiento, recreación y otras a
         numero="6"
         titulo="Comportamiento del desempleo, 2016-2025"
         caption="Tasa de desempleo del departamento de Bolívar, de Cartagena y de Colombia, con diferencias en puntos porcentuales"
-        fuente="DANE, GEIH. Bolívar: anexo «Empleo departamentos», serie anual 2007-2025. Colombia: promedio anual de la serie mensual del anexo GEIH de diciembre de 2025. Cartagena: año móvil enero-diciembre de la GEIH rediseñada."
-        nota="Tasa de desocupación (TD) en porcentaje de la fuerza de trabajo. Diferencia = Bolívar − Colombia (pp). Los datos departamentales provienen de una encuesta por muestreo y tienen un margen de error mayor que los nacionales. n. d. = no disponible con la metodología vigente."
+        fuente="DANE, GEIH. Bolívar: anexo «Empleo departamentos», serie anual 2007-2025. Colombia: promedio anual de la serie mensual del anexo GEIH de diciembre de 2025. Cartagena: promedio anual de los cuatro trimestres (anexo GEIH de diciembre de 2025, hoja de 23 ciudades y áreas metropolitanas)."
+        nota="Tasa de desocupación (TD) en porcentaje de la fuerza de trabajo. Diferencia = Bolívar − Colombia (pp). Los datos departamentales provienen de una encuesta por muestreo y tienen un margen de error mayor que los nacionales."
       >
         <thead>
           <tr>
@@ -85,7 +84,7 @@ const corta = (s: string) => s.replace(/, entretenimiento, recreación y otras a
       <LineChart
         titulo="Tasa de desempleo: Bolívar, Cartagena y Colombia"
         subtitulo="Porcentaje de la fuerza de trabajo, promedio anual"
-        desc="Desempleo anual. Bolívar está bien por debajo de Colombia hasta 2019, con 4,7 por ciento frente a 10,9. En 2020 sube a 9,8 y en 2021 llega a su máximo de 12,8, mientras Colombia llega a 16,5 en 2020. En 2024 y 2025 Bolívar queda por encima del promedio nacional. Cartagena, disponible desde 2021, se mantiene entre 10,9 y 12,4 por ciento."
+        desc="Desempleo anual. Bolívar está bien por debajo de Colombia hasta 2019, con 4,7 por ciento frente a 10,9. En 2020 sube a 9,8 y en 2021 llega a su máximo de 12,8, mientras Colombia llega a 16,5 en 2020. En 2024 y 2025 Bolívar queda por encima del promedio nacional. Cartagena pasa de 8,1 por ciento en 2016 a 6,0 en 2019, sube a 13,1 en 2020 y se mantiene entre 10,9 y 12,4 desde 2021."
         labels={e.map((p) => String(p.year))}
         series={[
           { name: 'Bolívar (departamento)', color: 'var(--bol)', values: e.map((p) => p.bolivar), marker: 'circle' },
@@ -96,7 +95,7 @@ const corta = (s: string) => s.replace(/, entretenimiento, recreación y otras a
 
       <Interpretacion>
         <p>Hasta 2019 el desempleo de Bolívar era bajo y decreciente: pasó de {n1(e[0].bolivar)} % en 2016 a {n1(minTd.bolivar)} % en {minTd.year}, el mínimo de la serie, entre 3 y 6 puntos por debajo del nacional. La pandemia lo llevó a {n1(e[4].bolivar)} % en 2020 y a {n1(maxTd.bolivar)} % en {maxTd.year}, el máximo, un año en que la economía ya crecía pero más personas volvieron a buscar empleo. Desde entonces bajó a {n1(e[7].bolivar)} % en 2023, repuntó a {n1(e[8].bolivar)} % en 2024 y cerró 2025 en {n1(e25.bolivar)} %.</p>
-        <p>La brecha con el país se cerró y se invirtió: en 2024 y 2025 Bolívar tiene más desempleo que Colombia (+{n1(e[8].dif)} y +{n1(e[9].dif)} pp). Cartagena, por su parte, está por encima del promedio nacional desde 2023 (10,9 % frente a 10,2 %; 12,4 % frente a 10,2 % en 2024; 10,9 % frente a 8,9 % en 2025). Colombia mejoró con fuerza en 2025 (8,9 %, la cifra más baja de la serie) y Bolívar no acompañó esa mejora.</p>
+        <p>La brecha con el país se cerró y se invirtió: en 2024 y 2025 Bolívar tiene más desempleo que Colombia (+{n1(e[8].dif)} y +{n1(e[9].dif)} pp). Cartagena tuvo un desempleo bajo y decreciente hasta 2019 ({n1(e[0].cartagena)} % en 2016 y {n1(e[3].cartagena)} % en 2019, por debajo del nacional), subió a {n1(e[4].cartagena)} % en 2020 y desde 2023 está por encima del promedio nacional (10,9 % frente a 10,2 %; 12,4 % frente a 10,2 % en 2024; 10,9 % frente a 8,9 % en 2025). Colombia mejoró con fuerza en 2025 (8,9 %, la cifra más baja de la serie) y Bolívar no acompañó esa mejora.</p>
       </Interpretacion>
     </div>
   </section>
@@ -176,7 +175,7 @@ const corta = (s: string) => s.replace(/, entretenimiento, recreación y otras a
       <p>La menor fue la de {minTd.year} ({n1(minTd.bolivar)} %) y la mayor, la de {maxTd.year} ({n1(maxTd.bolivar)} %). En Colombia el máximo fue 2020 (16,5 %) y el mínimo, 2025 (8,9 %).</p>
 
       <h3>¿El desempleo de la capital está por encima o por debajo del promedio nacional?</h3>
-      <p>Para Cartagena solo hay datos comparables desde 2021. Estuvo por debajo del nacional en 2021 y 2022 (12,3 % frente a 13,8 %, y 10,9 % frente a 11,2 %) y por encima desde 2023, con una brecha de 2,0 puntos porcentuales en 2025. El departamento en su conjunto sigue la misma tendencia, con una brecha menor (+0,5 pp en 2025).</p>
+      <p>Estuvo por debajo del nacional entre 2016 y 2022 (por ejemplo, {n1(e[3].cartagena)} % frente a {n1(e[3].colombia)} % en 2019, y {n1(e[5].cartagena)} % frente a {n1(e[5].colombia)} % en 2021) y por encima desde 2023, con una brecha de {n1(e[9].cartagena - e[9].colombia)} puntos porcentuales en 2025. El departamento en su conjunto sigue la misma tendencia, con una brecha menor (+{n1(e[9].dif)} pp en 2025).</p>
 
       <h3>¿Qué actividades generan más empleo?</h3>
       <p>El comercio, la agricultura, el transporte y almacenamiento, los servicios personales y la administración pública, educación y salud (ver el gráfico de ramas). Son actividades intensivas en trabajo y en buena parte informales.</p>
@@ -201,54 +200,62 @@ const corta = (s: string) => s.replace(/, entretenimiento, recreación y otras a
         <h2>Informalidad laboral</h2>
       </div>
       <div class="note">
-        <p><strong>Definición y dominio.</strong> El DANE mide la ocupación informal con la GEIH rediseñada, que cambió el método desde 2021 (según el empleador o el tipo de trabajo independiente y su registro). Por eso la serie comparable para Cartagena, la capital de Bolívar, y para Colombia empieza en 2021; <strong>no se mezcló</strong> con la medición anterior, que usaba otra definición. Los años 2016-2020 quedan como «n. d.».</p>
+        <p><strong>Dos metodologías.</strong> El DANE cambió la medición de la informalidad con el rediseño de la GEIH en 2021. Hasta 2020 (metodología <strong>anterior</strong>) se medía por el tamaño de la empresa (hasta 5 trabajadores), solo para las 13 ciudades y áreas metropolitanas y para Cartagena, y no se publicó un total nacional con esa definición. Desde 2021 (metodología <strong>vigente</strong>) se mide según el empleador y el tipo de trabajo independiente, y sí hay total nacional. Las dos series <strong>no son comparables entre sí</strong>: el salto de Cartagena entre 2020 ({n1(inf[4].cartagena)} %) y 2021 ({n1(inf[5].cartagena)} %) es en buena parte un cambio de método y no un deterioro real.</p>
+        <p>En 2020 el DANE no pudo medir la informalidad en marzo y abril por la pandemia; el dato de 2020 es el promedio de julio-septiembre y octubre-diciembre.</p>
       </div>
 
       <Tabla
         id="tabla-7"
         numero="7"
         titulo="Comportamiento de la informalidad laboral, 2016-2025"
-        caption="Proporción de ocupados informales en Cartagena y en Colombia, con diferencia en puntos porcentuales y referencia de las 13 ciudades"
-        fuente="DANE, GEIH, boletín técnico y anexo «Empleo informal y seguridad social», octubre-diciembre de 2025. Colombia y 13 ciudades: cifras publicadas por el DANE. Cartagena: cálculo propio como promedio de los cuatro trimestres de cada año."
-        nota="Proporción de la población ocupada que es informal (%). Diferencia = Cartagena − Colombia (pp). Cartagena es la capital de Bolívar y la única ciudad del departamento incluida en la muestra de ciudades de la GEIH. n. d. = no disponible con la metodología vigente."
+        caption="Proporción de ocupados informales en Cartagena, en Colombia y en las 13 ciudades, con diferencias en puntos porcentuales y metodología de medición de cada año"
+        fuente="DANE, GEIH. 2021-2025: boletín técnico y anexo «Empleo informal y seguridad social», octubre-diciembre de 2025; Colombia y 13 ciudades son cifras publicadas, y Cartagena es cálculo propio como promedio de los cuatro trimestres de cada año. 2016-2020: anexo de diciembre de 2020 a febrero de 2021 (metodología anterior)."
+        nota="Proporción de la población ocupada que es informal (%). Diferencias en puntos porcentuales (pp). n. d. = no publicado con esa metodología. Cartagena es la capital de Bolívar y la única ciudad del departamento en la muestra de ciudades de la GEIH."
       >
         <thead>
           <tr>
             <th scope="col">Año</th>
+            <th scope="col">Metodología</th>
             <th scope="col">Informalidad capital, Cartagena (%)</th>
             <th scope="col">Informalidad Colombia (%)</th>
-            <th scope="col">Diferencia (pp)</th>
-            <th scope="col">13 ciudades y áreas metropolitanas (%)</th>
+            <th scope="col">Diferencia con Colombia (pp)</th>
+            <th scope="col">13 ciudades y A.M. (%)</th>
+            <th scope="col">Diferencia con 13 ciudades (pp)</th>
           </tr>
         </thead>
         <tbody>
           {inf.map((p) => (
             <tr>
               <th scope="row">{p.year}</th>
-              <td class:list={[p.cartagena == null ? 'nd' : 'bol']}>{n1(p.cartagena)}</td>
+              <td class="l">{p.metodologia === 'anterior' ? 'Anterior' : 'Vigente'}</td>
+              <td class="bol">{n1(p.cartagena)}</td>
               <td class:list={[p.colombia == null ? 'nd' : 'col']}>{n1(p.colombia)}</td>
               <td class:list={[p.dif == null ? 'nd' : p.dif > 0 ? 'neg' : 'pos']}>{sgn(p.dif)}</td>
-              <td class:list={[p.trece == null ? 'nd' : '']}>{n1(p.trece)}</td>
+              <td>{n1(p.trece)}</td>
+              <td class:list={[p.difTrece == null ? 'nd' : p.difTrece > 0 ? 'neg' : 'pos']}>{sgn(p.difTrece)}</td>
             </tr>
           ))}
         </tbody>
       </Tabla>
+      <p class="source">En las columnas de diferencia, el verde indica menos informalidad que la referencia y el rojo, más.</p>
 
       <LineChart
-        titulo="Proporción de ocupados informales, 2021-2025"
-        subtitulo="Porcentaje de la población ocupada"
-        desc="Informalidad laboral entre 2021 y 2025. Cartagena empieza en 62,0 por ciento, por encima del total nacional con 59,4, y baja a 49,6 en 2025 mientras Colombia baja a 55,7. Las 13 ciudades principales son más formales, con 42,2 por ciento en 2025."
-        labels={infConDato.map((p) => String(p.year))}
+        titulo="Proporción de ocupados informales, 2016-2025"
+        subtitulo="Porcentaje de la población ocupada, en dos series por el cambio de metodología en 2021"
+        desc="Informalidad laboral entre 2016 y 2025 en dos series separadas por el cambio de metodología. Con la anterior, Cartagena está entre 52,9 y 56,8 por ciento y las 13 ciudades entre 46,2 y 47,6. Con la vigente, Cartagena baja de 62,0 por ciento en 2021 a 49,6 en 2025, mientras Colombia baja de 59,4 a 55,7 y las 13 ciudades se mantienen cerca de 42 por ciento."
+        labels={inf.map((p) => String(p.year))}
         series={[
-          { name: 'Cartagena (capital)', color: 'var(--bol)', values: infConDato.map((p) => p.cartagena), marker: 'circle' },
-          { name: 'Colombia', color: 'var(--col)', values: infConDato.map((p) => p.colombia), marker: 'square', dash: '6 4' },
-          { name: '13 ciudades y A.M.', color: 'var(--third)', values: infConDato.map((p) => p.trece), marker: 'diamond' },
+          { name: 'Cartagena, metodología anterior', color: 'var(--bol)', values: inf.map((p) => (p.metodologia === 'anterior' ? p.cartagena : null)), marker: 'circle', dash: '2 5' },
+          { name: 'Cartagena, metodología vigente', color: 'var(--bol)', values: inf.map((p) => (p.metodologia === 'vigente' ? p.cartagena : null)), marker: 'circle' },
+          { name: '13 ciudades, anterior', color: 'var(--third)', values: inf.map((p) => (p.metodologia === 'anterior' ? p.trece : null)), marker: 'diamond', dash: '2 5' },
+          { name: '13 ciudades, vigente', color: 'var(--third)', values: inf.map((p) => (p.metodologia === 'vigente' ? p.trece : null)), marker: 'diamond' },
+          { name: 'Colombia, vigente', color: 'var(--col)', values: inf.map((p) => p.colombia), marker: 'square' },
         ]}
         cero={false}
       />
 
       <Interpretacion>
-        <p>La informalidad en Cartagena cayó con fuerza: de {n1(inf[5].cartagena)} % en 2021 a {n1(inf[9].cartagena)} % en 2025, una baja de {n1((inf[5].cartagena ?? 0) - (inf[9].cartagena ?? 0))} puntos. En 2021 y 2022 estaba por encima del promedio nacional ({sgn(inf[5].dif)} y {sgn(inf[6].dif)} pp); desde 2023 está por debajo ({sgn(inf[7].dif)}, {sgn(inf[8].dif)} y {sgn(inf[9].dif)} pp). Aun así, casi uno de cada dos ocupados en la ciudad es informal, y la cifra de Cartagena está por encima de la de las 13 principales ciudades ({n1(inf[9].trece)} %).</p>
+        <p><strong>Metodología anterior (2016-2020).</strong> Cartagena tuvo entre {n1(inf[3].cartagena)} % y {n1(inf[1].cartagena)} % hasta 2019, unos 7 puntos por encima de las 13 principales ciudades ({n1(inf[3].trece)} % en 2019), y subió a {n1(inf[4].cartagena)} % en el segundo semestre de 2020. <strong>Metodología vigente (2021-2025).</strong> La informalidad en Cartagena cayó con fuerza: de {n1(inf[5].cartagena)} % en 2021 a {n1(inf[9].cartagena)} % en 2025, una baja de {n1((inf[5].cartagena ?? 0) - (inf[9].cartagena ?? 0))} puntos. En 2021 y 2022 estaba por encima del promedio nacional ({sgn(inf[5].dif)} y {sgn(inf[6].dif)} pp); desde 2023 está por debajo ({sgn(inf[7].dif)}, {sgn(inf[8].dif)} y {sgn(inf[9].dif)} pp). Aun así, casi uno de cada dos ocupados en la ciudad es informal, y la brecha con las 13 principales ciudades ({n1(inf[9].trece)} %) bajó de {n1(inf[5].difTrece)} a {n1(inf[9].difTrece)} puntos pero sigue abierta.</p>
         <p>En el departamento la situación es peor: el trabajo informal es la privación más frecuente en la pobreza multidimensional de Bolívar, con 83,4 % en 2025 (DANE, citado por El Universal).</p>
       </Interpretacion>
     </div>
@@ -261,13 +268,13 @@ const corta = (s: string) => s.replace(/, entretenimiento, recreación y otras a
       </div>
 
       <h3>¿Cómo ha evolucionado en los últimos años?</h3>
-      <p>Con datos comparables desde 2021, la informalidad en Cartagena bajó de manera sostenida hasta 2024 ({n1(inf[8].cartagena)} %) y se estabilizó en 2025 ({n1(inf[9].cartagena)} %), un leve aumento de {n1((inf[9].cartagena ?? 0) - (inf[8].cartagena ?? 0))} pp. A escala nacional la baja fue mucho menor, de 59,4 % a 55,7 %.</p>
+      <p>Con la metodología anterior, la informalidad de Cartagena bajó de {n1(inf[0].cartagena)} % en 2016 a {n1(inf[3].cartagena)} % en 2019 y subió a {n1(inf[4].cartagena)} % en el segundo semestre de 2020. Con la vigente, bajó de manera sostenida de {n1(inf[5].cartagena)} % en 2021 a {n1(inf[8].cartagena)} % en 2024 y se estabilizó en 2025 ({n1(inf[9].cartagena)} %), un leve aumento de {n1((inf[9].cartagena ?? 0) - (inf[8].cartagena ?? 0))} pp. A escala nacional la baja fue mucho menor, de 59,4 % a 55,7 %.</p>
 
       <h3>¿Cuándo fueron los mayores y menores niveles?</h3>
-      <p>El mayor fue el de 2021 ({n1(inf[5].cartagena)} %), con la economía saliendo de la pandemia, y el menor el de 2024 ({n1(inf[8].cartagena)} %).</p>
+      <p>Dentro de cada serie: con la metodología anterior, el menor nivel fue el de 2019 ({n1(inf[3].cartagena)} %) y el mayor el de 2020 ({n1(inf[4].cartagena)} %); con la vigente, el mayor fue el de 2021 ({n1(inf[5].cartagena)} %), con la economía saliendo de la pandemia, y el menor el de 2024 ({n1(inf[8].cartagena)} %). No se comparan niveles entre las dos series.</p>
 
       <h3>¿Está por encima o por debajo del promedio nacional?</h3>
-      <p>Por debajo desde 2023. Pero el promedio nacional es muy alto porque incluye la ruralidad (83,5 % de informalidad en centros poblados y rural disperso en 2025); frente a las 13 principales ciudades ({n1(inf[9].trece)} %), Cartagena está {n1((inf[9].cartagena ?? 0) - (inf[9].trece ?? 0))} puntos por encima.</p>
+      <p>Solo se puede comparar con el total nacional desde 2021, porque con la definición anterior el DANE no publicó total nacional. Cartagena estuvo por encima en 2021 y 2022 y por debajo desde 2023. Pero el promedio nacional es muy alto porque incluye la ruralidad (83,5 % de informalidad en centros poblados y rural disperso en 2025); frente a las 13 principales ciudades, Cartagena siempre está por encima: entre {n1(inf[3].difTrece)} y {n1(inf[4].difTrece)} puntos con la metodología anterior y {n1(inf[9].difTrece)} puntos en 2025 con la vigente.</p>
 
       <h3>¿En qué actividades se concentra el empleo informal?</h3>
       <p>En general, en el comercio al por menor, el transporte, el alojamiento y la comida, la construcción, la agricultura y los servicios personales. En Bolívar esas actividades emplean a la mayoría de los ocupados: comercio y agricultura, juntas, suman cerca de una de cada tres personas empleadas. La anotación vale como caracterización general del DANE para el total nacional; el archivo disponible no desagrega la informalidad por rama para Cartagena.</p>
